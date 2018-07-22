@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>admin page</title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+    <body>
+        <form action="/admin" method="post">
+
+           <div>
+                <label for="login">Login administrateur : </label>
+                <input type="login" id="login" name="login" />
+            </div>
+            
+            <div>
+                <label for="password">Mot de passe administrateur : </label>
+                <input type="password" id="password" name="password" />
+            </div>
+
+            <div class="button">
+                <button type="submit">Valider</button>
+            </div>
+            <div id="error"><%= error %></div>
+        </form>
+    </body>
+</html>
