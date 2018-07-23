@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>admin page</title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+    </head>
+    <body>
+        <h1>Interface d'aministration</h1>
+        <ol>
+
+            <% structure.forEach(function(navelement){ %>
+            <br><li><%= navelement.title %></li>
+
+            <ol>
+
+                <% navelement.NavigationSubElements.forEach(function(navsubelement){ %>
+
+                <br><li><%= navsubelement.title %></li>
+
+                <ol>
+
+                    <% navsubelement.PageContents.forEach(function(pagecontent){ %>
+
+                    <br><li> 
+
+                        <b>Type : </b> <%= pagecontent.type %> <b>Content : </b> <%= pagecontent.content %>
+
+                    </li>
+
+                    <% }); %>
+
+                </ol>
+
+                <% }); %>
+
+                <br><li>
+
+                    <form action="#" method="POST">
+
+                        <div>
+                            <label for="element">Nom sous-élément de navigation : </label>
+                            <input type="text" id="element" name="element" />
+                            <input type="hidden" name="idparent" value="<%= navelement.id %>" />
+                            <input type="hidden" name="formtype" value="addnavsubelement" />
+                            <button type="submit">Valider</button>
+                        </div>
+
+                    </form>
+
+
+            </ol>
+
+            <% }); %>
+
+            <br><li>
+
+                <form action="#" method="POST">
+
+                    <div>
+                        <label for="element">Nom élément de navigation : </label>
+                        <input type="text" id="element" name="element" />
+                        <input type="hidden" name="formtype" value="addnavelement" />
+                        <button type="submit">Valider</button>
+                    </div>
+
+                </form>
+
+            </li>
+
+        </ol>
+    </body>
+</html>
