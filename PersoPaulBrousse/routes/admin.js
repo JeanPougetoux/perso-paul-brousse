@@ -4,6 +4,7 @@ var waterfall = require('async-waterfall');
 var models = require('../models');
 var router = express.Router();
 
+
 router.get('/connexion', function(req, res, next) {
     if(req.session.connected){ 
         res.redirect("/admin/gestion");
@@ -88,9 +89,50 @@ router.get('/gestion', function(req, res, next){
                 structure: results 
             });
         }).catch(function(error){
-            
+
         });
     }
+});
+
+router.post('/gestion/navelement/add', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.name == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+
+    models.NavigationElement.max('order').then(function(result){
+        var order = result ? result + 1 : 1;
+        models.NavigationElement.create({
+            title: req.body.name,
+            order: order
+        }).then(function(navelement){
+            return res.status(200).json({'success': "L'élément de navigation a bien été ajouté !"});
+        })
+    });
+});
+
+router.post('/gestion/navsubelement/add', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.name == null || req.body.idparent == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+
+    models.NavigationSubElement.max('order', { where: { NavigationElementId: req.body.idparent } }).then(function(result){
+        var order = result ? result + 1 : 1;
+        models.NavigationSubElement.create({
+            title: req.body.name,
+            order: order,
+            NavigationElementId: req.body.idparent
+        }).then(function(navsubelement){
+            return res.status(200).json({'success': "L'élément de sous-navigation a bien été ajouté !"});
+        })
+    });
 });
 
 router.post('/gestion', function(req, res, next){
@@ -121,7 +163,45 @@ router.post('/gestion', function(req, res, next){
                 })
             });
         }
+        else if(req.body.formtype && req.body.formtype == "deletenavelement"){
+            models.NavigationElement.findOne({
+                where: { id: req.body.id }
+            }).then(function(result){
+                result.destroy({force: true});
+                models.NavigationSubElement.findAll({
+                    where: { NavigationElementId: req.body.id }
+                }).then(function(results){
+                    results.forEach(function(result){
+                        result.destroy({force: true});
+                    });
+                    res.redirect("/admin/gestion");
+                }).catch(function(error){
+
+                })
+            }).catch(function(error){
+
+            });
+        }
+        else if(req.body.formtype && req.body.formtype == "deletenavsubelement"){
+            models.NavigationSubElement.findOne({
+                where: { id: req.body.id }
+            }).then(function(result){
+                result.destroy({force: true});
+                res.redirect("/admin/gestion");
+                return;
+            }).catch(function(error){
+
+            });
+        }
     }
+});
+
+router.get('/', function(req, res, next){
+    if(req.session.connected){ 
+        res.redirect("/admin/gestion");
+    } else {
+        res.redirect("/admin/connexion");
+    } 
 });
 
 module.exports = router;

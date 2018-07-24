@@ -3,70 +3,90 @@
     <head>
         <title>admin page</title>
         <link rel='stylesheet' href='/stylesheets/style.css' />
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
-        <h1>Interface d'aministration</h1>
-        <ol>
+        <h3>Interface d'aministration</h3>
 
-            <% structure.forEach(function(navelement){ %>
-            <br><li><%= navelement.title %></li>
+        <table class="centered">
+            <thead>
+                <tr>
+                    <th>Element de navigation</th>
+                    <th>Element de sous-navigation</th>
+                    <th>Modifier</th>
+                    <th>Supprimer</th>
+                    <th>Monter/Descendre</th>
+                </tr>
+            </thead>
 
-            <ol>
+            <tbody>
+
+                <% structure.forEach(function(navelement){ %>
+                <tr>
+                    <td><%= navelement.title %></td>
+                    <td></td>
+                    <td></td>
+                    <td>
+                        <form action="#" method="POST">
+                            <input type="hidden" name="id" value="<%= navelement.id %>" />
+                            <input type="hidden" name="formtype" value="deletenavelement" />
+                            <a onclick="$(this).closest('form').submit()" class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons">clear</i></a>
+                        </form>
+                    </td>
+                    <td></td>
+                </tr>
 
                 <% navelement.NavigationSubElements.forEach(function(navsubelement){ %>
-
-                <br><li><%= navsubelement.title %></li>
-
-                <ol>
-
-                    <% navsubelement.PageContents.forEach(function(pagecontent){ %>
-
-                    <br><li> 
-
-                        <b>Type : </b> <%= pagecontent.type %> <b>Content : </b> <%= pagecontent.content %>
-
-                    </li>
-
-                    <% }); %>
-
-                </ol>
-
+                <tr>
+                    <td></td>
+                    <td><%= navsubelement.title %></td>
+                    <td></td>
+                    <td>
+                        <form action="#" method="POST">
+                            <input type="hidden" name="id" value="<%= navsubelement.id %>" />
+                            <input type="hidden" name="formtype" value="deletenavsubelement" />
+                            <a onclick="$(this).closest('form').submit()" class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons">clear</i></a>
+                        </form>
+                    </td>
+                    <td></td>
+                </tr>
                 <% }); %>
 
-                <br><li>
+                <tr>
+                    <td></td>
+                    <td>
+                        <a class="add-sub-nav-element btn-floating btn-small waves-effect waves-light blue lighten-3">
+                            <input type="hidden" class="navelementid" value="<%= navelement.id %>" />
+                            <i class="material-icons">add</i>
+                        </a>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
 
-                    <form action="#" method="POST">
+                <% }); %>
+                <tr>
+                    <td>
+                        <a class="add-nav-element btn-floating btn-small waves-effect waves-light blue lighten-3"><i class="material-icons">add</i></a>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                </tr>
 
-                        <div>
-                            <label for="element">Nom sous-élément de navigation : </label>
-                            <input type="text" id="element" name="element" />
-                            <input type="hidden" name="idparent" value="<%= navelement.id %>" />
-                            <input type="hidden" name="formtype" value="addnavsubelement" />
-                            <button type="submit">Valider</button>
-                        </div>
+            </tbody>
+        </table>
 
-                    </form>
-
-
-            </ol>
-
-            <% }); %>
-
-            <br><li>
-
-                <form action="#" method="POST">
-
-                    <div>
-                        <label for="element">Nom élément de navigation : </label>
-                        <input type="text" id="element" name="element" />
-                        <input type="hidden" name="formtype" value="addnavelement" />
-                        <button type="submit">Valider</button>
-                    </div>
-
-                </form>
-
-            </li>
-
-        </ol>
+        <script type="text/javascript" src="/javascripts/jquery.js"></script>
+        <script type="text/javascript" src="/javascripts/materialize.min.js"></script>
+        <script type="text/javascript" src="/javascripts/sweetalert.js"></script>
+        <script type="text/javascript" src="/javascripts/imports.js"></script>
+        <script type="text/javascript" src="/javascripts/actions.js"></script>
     </body>
 </html>
