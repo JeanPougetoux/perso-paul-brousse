@@ -26,33 +26,67 @@
             <tbody>
 
                 <% structure.forEach(function(navelement){ %>
+                <%
+                    var up = (structure.indexOf(navelement) > 0 ? "" : "disabled");
+                    var down = (structure.indexOf(navelement) == structure.length - 1 ? "disabled" : "");
+                %>
                 <tr>
                     <td><%= navelement.title %></td>
                     <td></td>
-                    <td></td>
                     <td>
-                        <form action="#" method="POST">
-                            <input type="hidden" name="id" value="<%= navelement.id %>" />
-                            <input type="hidden" name="formtype" value="deletenavelement" />
-                            <a onclick="$(this).closest('form').submit()" class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons">clear</i></a>
-                        </form>
+                        <a class="modify-nav-element btn-floating btn-small waves-effect waves-light orange">
+                            <input type="hidden" value="<%= navelement.id %>" />
+                            <i class="material-icons">create</i>
+                        </a>
                     </td>
-                    <td></td>
+                    <td>
+                        <a class="delete-nav-element btn-floating btn-small waves-effect waves-light red">
+                            <input type="hidden" value="<%= navelement.id %>" />
+                            <i class="material-icons">clear</i>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="up-nav-element btn-floating btn-small waves-effect waves-light green lighten-1 <%= up %>">
+                            <input type="hidden" value="<%= navelement.id %>" />
+                            <i class="material-icons">arrow_upward</i>
+                        </a>
+                        <a class="down-nav-element btn-floating btn-small waves-effect waves-light green lighten-1 <%= down %>">
+                            <input type="hidden" value="<%= navelement.id %>" />
+                            <i class="material-icons">arrow_downward</i>
+                        </a>
+                    </td>
                 </tr>
 
                 <% navelement.NavigationSubElements.forEach(function(navsubelement){ %>
+                <%
+                    var up = (navelement.NavigationSubElements.indexOf(navsubelement) > 0 ? "" : "disabled");
+                    var down = (navelement.NavigationSubElements.indexOf(navsubelement) == navelement.NavigationSubElements.length- 1 ? "disabled" : "");
+                %>
                 <tr>
                     <td></td>
                     <td><%= navsubelement.title %></td>
-                    <td></td>
                     <td>
-                        <form action="#" method="POST">
-                            <input type="hidden" name="id" value="<%= navsubelement.id %>" />
-                            <input type="hidden" name="formtype" value="deletenavsubelement" />
-                            <a onclick="$(this).closest('form').submit()" class="btn-floating btn-small waves-effect waves-light red"><i class="material-icons">clear</i></a>
-                        </form>
+                        <a class="modify-sub-nav-element btn-floating btn-small waves-effect waves-light orange">
+                            <input type="hidden" value="<%= navsubelement.id %>" />
+                            <i class="material-icons">create</i>
+                        </a>
                     </td>
-                    <td></td>
+                    <td>
+                        <a class="delete-sub-nav-element btn-floating btn-small waves-effect waves-light red">
+                            <input type="hidden" value="<%= navsubelement.id %>" />
+                            <i class="material-icons">clear</i>
+                        </a>
+                    </td>
+                    <td>
+                        <a class="up-sub-nav-element btn-floating btn-small waves-effect waves-light green lighten-1 <%= up %>">
+                            <input type="hidden" value="<%= navsubelement.id %>" />
+                            <i class="material-icons">arrow_upward</i>
+                        </a>
+                        <a class="down-sub-nav-element btn-floating btn-small waves-effect waves-light green lighten-1 <%= down %>">
+                            <input type="hidden" value="<%= navsubelement.id %>" />
+                            <i class="material-icons">arrow_downward</i>
+                        </a>
+                    </td>
                 </tr>
                 <% }); %>
 
