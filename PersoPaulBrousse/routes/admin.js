@@ -17,6 +17,70 @@ router.get('/connexion', function(req, res, next) {
     }
 });
 
+router.get('/gestion/:id', function(req, res, next){
+    if(!req.session.connected){
+        res.redirect("/admin/connexion");
+    } 
+    else{
+        models.NavigationSubElement.findOne({
+            where: { id: req.params.id }
+        }).then(function(element){
+            if(!element){
+                res.redirect("/admin/gestion");
+            } else {
+                if(element.type.localeCompare("CONTENT") == 0){
+                    models.PageContent.findAll({
+                        where: { NavigationSubElementId: req.params.id }
+                    }).then(function(pagecontents){
+                        
+                    }).catch(function(error){
+
+                    });
+                }
+                else {
+
+                }
+            }
+        })
+    }
+});
+
+router.get('/gestion', function(req, res, next){
+    if(!req.session.connected){
+        res.redirect("/admin/connexion");
+    } 
+    else {
+        models.NavigationElement.findAll({
+            attributes: ['id', 'title', 'order'],
+            order: [
+                ['order', 'ASC'],
+                [models.NavigationSubElement, 'order', 'ASC']
+            ],
+            include: [
+                { 
+                    model: models.NavigationSubElement,
+                    required: false,
+                    attributes: ['id', 'title', 'order', 'type']
+                }
+            ]
+        }).then(function(results){
+            res.render("pages/gestion-admin", {
+                structure: results 
+            });
+        }).catch(function(error){
+
+        });
+    }
+});
+
+router.get('/', function(req, res, next){
+    if(req.session.connected){ 
+        res.redirect("/admin/gestion");
+    } else {
+        res.redirect("/admin/connexion");
+    } 
+});
+
 router.post('/connexion', function(req, res, next) {
 
     if(req.session.connected){ res.redirect("/admin/gestion"); }
@@ -56,35 +120,6 @@ router.post('/connexion', function(req, res, next) {
     });
 });
 
-router.get('/gestion', function(req, res, next){
-    if(!req.session.connected){
-        res.redirect("/admin/connexion");
-    } 
-    else {
-        models.NavigationElement.findAll({
-            attributes: ['id', 'title', 'order'],
-            order: [
-                ['order', 'ASC'],
-                [models.NavigationSubElement, 'order', 'ASC']
-            ],
-            include: [
-                { 
-                    model: models.NavigationSubElement,
-                    required: false,
-                    attributes: ['id', 'title', 'order']
-                }
-            ]
-        }).then(function(results){
-            console.log(JSON.stringify(results));
-            res.render("pages/gestion-admin", {
-                structure: results 
-            });
-        }).catch(function(error){
-
-        });
-    }
-});
-
 router.post('/gestion/navelement/add', function(req, res, next){
     if(!req.session.connected){
         return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
@@ -110,7 +145,7 @@ router.post('/gestion/navsubelement/add', function(req, res, next){
         return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
     }
 
-    if(req.body.name == null || req.body.idparent == null){
+    if(req.body.name == null || req.body.type == null || req.body.idparent == null){
         return res.status(500).json({'error': "Il manque un paramètre"});
     }
 
@@ -118,10 +153,41 @@ router.post('/gestion/navsubelement/add', function(req, res, next){
         var order = result ? result + 1 : 1;
         models.NavigationSubElement.create({
             title: req.body.name,
+            type: req.body.type,
             order: order,
             NavigationElementId: req.body.idparent
         }).then(function(navsubelement){
-            return res.status(200).json({'success': "L'élément de sous-navigation a bien été ajouté !"});
+            if(req.body.type.localeCompare("CONTENT") == 0){
+                models.PageContent.create({
+                    content: "",
+                    order: 1,
+                    NavigationSubElementId: navsubelement.id
+                }).then(function(pagecontent){
+                    return res.status(200).json({'success': "L'élément de sous-navigation a bien été ajouté !"});
+                }).catch(function(error){
+
+                });
+            } 
+            else if(req.body.type.localeCompare("LINK") == 0){
+                models.PageLink.create({
+                    link: "",
+                    NavigationSubElementId: navsubelement.id
+                }).then(function(pagelink){
+                    return res.status(200).json({'success': "L'élément de sous-navigation a bien été ajouté !"});
+                }).catch(function(error){
+
+                });
+            }
+            else if(req.body.type.localeCompare("LIST") == 0){
+                models.PageList.create({
+                    title: "",
+                    NavigationSubElementId: navsubelement.id
+                }).then(function(pagelist){
+                    return res.status(200).json({'success': "L'élément de sous-navigation a bien été ajouté !"});
+                }).catch(function(error){
+
+                });
+            }
         })
     });
 });
@@ -238,24 +304,24 @@ router.post('/gestion/navelement/up', function(req, res, next){
     }).then(function(element){
         if(element){
             models.NavigationElement.max('order', { where: { order: { [op.lt]: element.order } } }).then(max => {
-               models.NavigationElement.findOne({
-                   where: { order: max }
-               }).then(function(secondElement){
-                  var temp = JSON.parse(JSON.stringify(element.order));
-                   var temp2 = JSON.parse(JSON.stringify(secondElement.order));
-                   element.order = -1;
-                   element.save().then(function(){
-                       secondElement.order = temp;
-                       secondElement.save().then(function(){
-                          element.order = temp2;
-                           element.save().then(function(){
-                               return res.status(200).json({'success': "Les deux éléments de navigation ont bien été swappés"});
-                           })
-                       });
-                   });
-               }).catch(function(error){
-                   
-               });
+                models.NavigationElement.findOne({
+                    where: { order: max }
+                }).then(function(secondElement){
+                    var temp = JSON.parse(JSON.stringify(element.order));
+                    var temp2 = JSON.parse(JSON.stringify(secondElement.order));
+                    element.order = -1;
+                    element.save().then(function(){
+                        secondElement.order = temp;
+                        secondElement.save().then(function(){
+                            element.order = temp2;
+                            element.save().then(function(){
+                                return res.status(200).json({'success': "Les deux éléments de navigation ont bien été swappés"});
+                            })
+                        });
+                    });
+                }).catch(function(error){
+
+                });
             });
         } else {
             return res.status(404).json({'error': "L'élément de navigation correspondant à cet id n'a pas été trouvé"});     
@@ -279,24 +345,24 @@ router.post('/gestion/navelement/down', function(req, res, next){
     }).then(function(element){
         if(element){
             models.NavigationElement.min('order', { where: { order: { [op.gt]: element.order } } }).then(min => {
-               models.NavigationElement.findOne({
-                   where: { order: min }
-               }).then(function(secondElement){
-                  var temp = JSON.parse(JSON.stringify(element.order));
-                   var temp2 = JSON.parse(JSON.stringify(secondElement.order));
-                   element.order = -1;
-                   element.save().then(function(){
-                       secondElement.order = temp;
-                       secondElement.save().then(function(){
-                          element.order = temp2;
-                           element.save().then(function(){
-                               return res.status(200).json({'success': "Les deux éléments de navigation ont bien été swappés"});
-                           })
-                       });
-                   });
-               }).catch(function(error){
-                   
-               });
+                models.NavigationElement.findOne({
+                    where: { order: min }
+                }).then(function(secondElement){
+                    var temp = JSON.parse(JSON.stringify(element.order));
+                    var temp2 = JSON.parse(JSON.stringify(secondElement.order));
+                    element.order = -1;
+                    element.save().then(function(){
+                        secondElement.order = temp;
+                        secondElement.save().then(function(){
+                            element.order = temp2;
+                            element.save().then(function(){
+                                return res.status(200).json({'success': "Les deux éléments de navigation ont bien été swappés"});
+                            })
+                        });
+                    });
+                }).catch(function(error){
+
+                });
             });
         } else {
             return res.status(404).json({'error': "L'élément de navigation correspondant à cet id n'a pas été trouvé"});     
@@ -320,24 +386,24 @@ router.post('/gestion/navsubelement/up', function(req, res, next){
     }).then(function(element){
         if(element){
             models.NavigationSubElement.max('order', { where: { order: { [op.lt]: element.order } }, NavigationElementId: element.NavigationElementId }).then(max => {
-               models.NavigationSubElement.findOne({
-                   where: { order: max, NavigationElementId: element.NavigationElementId }
-               }).then(function(secondElement){
-                  var temp = JSON.parse(JSON.stringify(element.order));
-                   var temp2 = JSON.parse(JSON.stringify(secondElement.order));
-                   element.order = -1;
-                   element.save().then(function(){
-                       secondElement.order = temp;
-                       secondElement.save().then(function(){
-                          element.order = temp2;
-                           element.save().then(function(){
-                               return res.status(200).json({'success': "Les deux éléments de sous-navigation ont bien été swappés"});
-                           })
-                       });
-                   });
-               }).catch(function(error){
-                   
-               });
+                models.NavigationSubElement.findOne({
+                    where: { order: max, NavigationElementId: element.NavigationElementId }
+                }).then(function(secondElement){
+                    var temp = JSON.parse(JSON.stringify(element.order));
+                    var temp2 = JSON.parse(JSON.stringify(secondElement.order));
+                    element.order = -1;
+                    element.save().then(function(){
+                        secondElement.order = temp;
+                        secondElement.save().then(function(){
+                            element.order = temp2;
+                            element.save().then(function(){
+                                return res.status(200).json({'success': "Les deux éléments de sous-navigation ont bien été swappés"});
+                            })
+                        });
+                    });
+                }).catch(function(error){
+
+                });
             });
         } else {
             return res.status(404).json({'error': "L'élément de sous-navigation correspondant à cet id n'a pas été trouvé"});     
@@ -361,24 +427,24 @@ router.post('/gestion/navsubelement/down', function(req, res, next){
     }).then(function(element){
         if(element){
             models.NavigationSubElement.min('order', { where: { order: { [op.gt]: element.order } }, NavigationElementId: element.NavigationElementId }).then(min => {
-               models.NavigationSubElement.findOne({
-                   where: { order: min, NavigationElementId: element.NavigationElementId }
-               }).then(function(secondElement){
-                  var temp = JSON.parse(JSON.stringify(element.order));
-                   var temp2 = JSON.parse(JSON.stringify(secondElement.order));
-                   element.order = -1;
-                   element.save().then(function(){
-                       secondElement.order = temp;
-                       secondElement.save().then(function(){
-                          element.order = temp2;
-                           element.save().then(function(){
-                               return res.status(200).json({'success': "Les deux éléments de sous-navigation ont bien été swappés"});
-                           })
-                       });
-                   });
-               }).catch(function(error){
-                   
-               });
+                models.NavigationSubElement.findOne({
+                    where: { order: min, NavigationElementId: element.NavigationElementId }
+                }).then(function(secondElement){
+                    var temp = JSON.parse(JSON.stringify(element.order));
+                    var temp2 = JSON.parse(JSON.stringify(secondElement.order));
+                    element.order = -1;
+                    element.save().then(function(){
+                        secondElement.order = temp;
+                        secondElement.save().then(function(){
+                            element.order = temp2;
+                            element.save().then(function(){
+                                return res.status(200).json({'success': "Les deux éléments de sous-navigation ont bien été swappés"});
+                            })
+                        });
+                    });
+                }).catch(function(error){
+
+                });
             });
         } else {
             return res.status(404).json({'error': "L'élément de sous-navigation correspondant à cet id n'a pas été trouvé"});     
@@ -388,12 +454,29 @@ router.post('/gestion/navsubelement/down', function(req, res, next){
     });
 });
 
-router.get('/', function(req, res, next){
-    if(req.session.connected){ 
-        res.redirect("/admin/gestion");
-    } else {
-        res.redirect("/admin/connexion");
-    } 
+router.post('/gestion/navsubelement/updatelink', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.navsubelementid == null || req.body.newlink == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+
+    models.PageLink.findOne({
+        where: { NavigationSubElementId: req.body.navsubelementid }
+    }).then(function(pagelink){
+        if(pagelink){
+            pagelink.link = req.body.newlink;
+            pagelink.save().then(function(){
+                return res.status(200).json({'success': 'Le lien du document a bien été changé!'}); 
+            });
+        } else {
+            return res.status(404).json({'error': 'Impossible de trouver le lien pour ce sous-élément, il vaudrait mieux le supprimer'});
+        }
+    }).catch(function(error){
+
+    });
 });
 
 module.exports = router;

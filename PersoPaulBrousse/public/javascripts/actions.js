@@ -18,7 +18,7 @@ $(document).ready(function(){
                 },
                 url: "/admin/gestion/navelement/add",
                 error: function (jqXHR, textStatus, errorThrown) {
-                    swal("Erreur", "Une erreur est survenue pendant la création de l'élément de navigation", "error");
+                    swal("Erreur", jqXHR.responseJSON.error, "error");
                 },
                 success: function (msg) {
                     swal("Félicitation", msg.success, "success").then(function(){
@@ -45,24 +45,45 @@ $(document).ready(function(){
         }).then(name => {
             if(!name){
                 return;
+            } else {
+                var idparent = $(this).find("input").val();
+                swal({
+                    text: 'Donnez le type de contenu de votre nouveau sous-élément de navigation (CONTENT, LINK, LIST)',
+                    content: "input",
+                    button: {
+                        text: "Valider"
+                    }
+                }).then(function(type){
+                    if(type != "CONTENT" && type != "LINK" && type != "LIST"){
+                        swal("Erreur", "Le type doit être CONTENT, LINK ou LIST", "error");
+                    } else {
+                        $.ajax({
+                            type: 'POST',
+                            dataType: 'json',
+                            data: {
+                                'name': name,
+                                'type': type,
+                                'idparent': idparent
+                            },
+                            url: "/admin/gestion/navsubelement/add",
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                swal("Erreur", jqXHR.responseJSON.error, "error");
+                            },
+                            success: function (msg) {
+                                swal("Félicitation", msg.success, "success").then(function(){
+                                    location.reload();  
+                                });
+                            }
+                        });
+                    }
+                }).catch(err => {
+                    if (err) {
+                        swal("Erreur", "Une erreur est arrivée !", "error");
+                    } else {
+                        swal.close();
+                    }
+                });
             }
-            $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    'name': name,
-                    'idparent': $(this).find("input").val()
-                },
-                url: "/admin/gestion/navsubelement/add",
-                error: function (jqXHR, textStatus, errorThrown) {
-                    swal("Erreur", "Une erreur est survenue pendant la création du sous-élément de navigation", "error");
-                },
-                success: function (msg) {
-                    swal("Félicitation", msg.success, "success").then(function(){
-                        location.reload();  
-                    });
-                }
-            });
         }).catch(err => {
             if (err) {
                 swal("Erreur", "Une erreur est arrivée !", "error");
@@ -92,7 +113,7 @@ $(document).ready(function(){
                 },
                 url: "/admin/gestion/navelement/modify",
                 error: function (jqXHR, textStatus, errorThrown) {
-                    swal("Erreur", "Une erreur est survenue pendant le changement du nom de l'élément de navigation", "error");
+                    swal("Erreur", jqXHR.responseJSON.error, "error");
                 },
                 success: function (msg) {
                     swal("Félicitation", msg.success, "success").then(function(){
@@ -129,7 +150,7 @@ $(document).ready(function(){
                 },
                 url: "/admin/gestion/navsubelement/modify",
                 error: function (jqXHR, textStatus, errorThrown) {
-                    swal("Erreur", "Une erreur est survenue pendant le changement du nom de l'élément de sous-navigation", "error");
+                    swal("Erreur", jqXHR.responseJSON.error, "error");
                 },
                 success: function (msg) {
                     swal("Félicitation", msg.success, "success").then(function(){
@@ -165,7 +186,7 @@ $(document).ready(function(){
                 },
                 url: "/admin/gestion/navelement/delete",
                 error: function (jqXHR, textStatus, errorThrown) {
-                    swal("Erreur", "Une erreur est survenue pendant la suppression de l'élément de navigation", "error");
+                    swal("Erreur", jqXHR.responseJSON.error, "error");
                 },
                 success: function (msg) {
                     swal("Félicitation", msg.success, "success").then(function(){
@@ -201,7 +222,7 @@ $(document).ready(function(){
                 },
                 url: "/admin/gestion/navsubelement/delete",
                 error: function (jqXHR, textStatus, errorThrown) {
-                    swal("Erreur", "Une erreur est survenue pendant la suppression de l'élément de sous-navigation" + JSON.stringify(jqXHR), "error");
+                    swal("Erreur", jqXHR.responseJSON.error, "error");
                 },
                 success: function (msg) {
                     swal("Félicitation", msg.success, "success").then(function(){
@@ -227,7 +248,7 @@ $(document).ready(function(){
             },
             url: "/admin/gestion/navelement/up",
             error: function (jqXHR, textStatus, errorThrown) {
-                swal("Erreur", JSON.stringify(jqXHR), "error");
+                swal("Erreur", jqXHR.responseJSON.error, "error");
             },
             success: function (msg) {
                 swal("Félicitation", msg.success, "success").then(function(){
@@ -236,7 +257,7 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     $(".down-nav-element").click(function(){
         $.ajax({
             type: 'POST',
@@ -246,7 +267,7 @@ $(document).ready(function(){
             },
             url: "/admin/gestion/navelement/down",
             error: function (jqXHR, textStatus, errorThrown) {
-                swal("Erreur", JSON.stringify(jqXHR), "error");
+                swal("Erreur", jqXHR.responseJSON.error, "error");
             },
             success: function (msg) {
                 swal("Félicitation", msg.success, "success").then(function(){
@@ -255,7 +276,7 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     $(".up-sub-nav-element").click(function(){
         $.ajax({
             type: 'POST',
@@ -265,7 +286,7 @@ $(document).ready(function(){
             },
             url: "/admin/gestion/navsubelement/up",
             error: function (jqXHR, textStatus, errorThrown) {
-                swal("Erreur", JSON.stringify(jqXHR), "error");
+                swal("Erreur", jqXHR.responseJSON.error, "error");
             },
             success: function (msg) {
                 swal("Félicitation", msg.success, "success").then(function(){
@@ -274,7 +295,7 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     $(".down-sub-nav-element").click(function(){
         $.ajax({
             type: 'POST',
@@ -284,7 +305,7 @@ $(document).ready(function(){
             },
             url: "/admin/gestion/navsubelement/down",
             error: function (jqXHR, textStatus, errorThrown) {
-                swal("Erreur", JSON.stringify(jqXHR), "error");
+                swal("Erreur", jqXHR.responseJSON.error, "error");
             },
             success: function (msg) {
                 swal("Félicitation", msg.success, "success").then(function(){
@@ -292,5 +313,47 @@ $(document).ready(function(){
                 });
             }
         });
+    });
+
+    $(".content-sub-nav-element").click(function(){
+        const id = $(this).find("input.navelementid").val();
+        const type = $(this).find("input.navelementtype").val();
+        if(type.localeCompare("CONTENT") == 0){
+            location.href = "/admin/gestion/" + id;
+        }
+        else if(type.localeCompare("LINK") == 0){
+            swal({
+                text: 'Donnez le nouveau lien du document à télécharger pour ce sous-élément',
+                content: "input",
+                button: {
+                    text: "Valider",
+                }
+            }).then(name => {
+                if(!name){
+                    return;
+                }
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        'navsubelementid': id,
+                        'newlink': name
+                    },
+                    url: "/admin/gestion/navsubelement/updatelink",
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        swal("Erreur", jqXHR.responseJSON.error, "error");
+                    },
+                    success: function (msg) {
+                        swal("Félicitation", msg.success, "success");
+                    }
+                });
+            }).catch(err => {
+                if (err) {
+                    swal("Erreur", "Une erreur est arrivée !", "error");
+                } else {
+                    swal.close();
+                }
+            });
+        }
     });
 });

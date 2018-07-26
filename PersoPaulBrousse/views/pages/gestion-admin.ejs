@@ -17,9 +17,11 @@
                 <tr>
                     <th>Element de navigation</th>
                     <th>Element de sous-navigation</th>
+                    <th>Type</th>
                     <th>Modifier</th>
                     <th>Supprimer</th>
                     <th>Monter/Descendre</th>
+                    <th>Contenu</th>
                 </tr>
             </thead>
 
@@ -32,6 +34,7 @@
                 %>
                 <tr>
                     <td><%= navelement.title %></td>
+                    <td></td>
                     <td></td>
                     <td>
                         <a class="modify-nav-element btn-floating btn-small waves-effect waves-light orange">
@@ -55,6 +58,7 @@
                             <i class="material-icons">arrow_downward</i>
                         </a>
                     </td>
+                    <td></td>
                 </tr>
 
                 <% navelement.NavigationSubElements.forEach(function(navsubelement){ %>
@@ -65,6 +69,7 @@
                 <tr>
                     <td></td>
                     <td><%= navsubelement.title %></td>
+                    <td><%= navsubelement.type %></td>
                     <td>
                         <a class="modify-sub-nav-element btn-floating btn-small waves-effect waves-light orange">
                             <input type="hidden" value="<%= navsubelement.id %>" />
@@ -87,6 +92,13 @@
                             <i class="material-icons">arrow_downward</i>
                         </a>
                     </td>
+                    <td>
+                        <a class="content-sub-nav-element btn-floating btn-small waves-effect waves-light purple lighten-3">
+                            <input type="hidden" class="navelementid" value="<%= navsubelement.id %>" />
+                            <input type="hidden" class="navelementtype" value="<%= navsubelement.type %>" />
+                            <i class="material-icons">build</i>
+                        </a>
+                    </td>
                 </tr>
                 <% }); %>
 
@@ -101,6 +113,8 @@
                     <td></td>
                     <td></td>
                     <td></td>
+                    <td></td>
+                    <td></td>
                 </tr>
 
                 <% }); %>
@@ -108,6 +122,8 @@
                     <td>
                         <a class="add-nav-element btn-floating btn-small waves-effect waves-light blue lighten-3"><i class="material-icons">add</i></a>
                     </td>
+                    <td></td>
+                    <td></td>
                     <td></td>
                     <td></td>
                     <td></td>

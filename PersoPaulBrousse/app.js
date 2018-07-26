@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var session = require('express-session')
 
+var test = require('./routes/test');
 var admin = require('./routes/admin');
 var models = require("./models");
 
@@ -20,9 +21,11 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use("/public/images", express.static("public/images"));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: 'persopaulbrousse2018' }));
 
+app.use('/test', test);
 app.use('/admin', admin);
 
 // catch 404 and forward to error handler

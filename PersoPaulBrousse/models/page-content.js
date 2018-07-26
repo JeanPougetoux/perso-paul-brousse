@@ -2,7 +2,6 @@
 module.exports = (sequelize, DataTypes) => {
     var PageContent = sequelize.define('PageContent', {
         content: { type: DataTypes.TEXT, allowNull: false },
-        type: { type: DataTypes.STRING(10), allowNull: false, defaultValue: "HTML" },
         order: { type: DataTypes.INTEGER, allowNull: false, unique: 'order' }
     }, {
         paranoid: true,

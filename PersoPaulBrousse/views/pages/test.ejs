@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>test page</title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+
+        <% structure.forEach(function(navelement){ %>
+        <ul id="nav<%= navelement.id %>" class="dropdown-content">
+            <% navelement.NavigationSubElements.forEach(function(navsubelement){ %>
+            <% 
+            var link;
+            if(navsubelement.type == "LINK"){ %>
+            <li><a href='<%= "/public/images/" + navsubelement.PageLink.link; %>' download="<%= navsubelement.PageLink.link %>"><%= navsubelement.title %></a></li>
+            <% } else { %>
+            <li><a href='<%= "/" + navelement.title + "/" + navsubelement.title; %>'><%= navsubelement.title %></a></li>
+            <% } %>
+
+            <% }); %>
+        </ul>
+        <% }); %>
+
+        <nav>
+            <div class="nav-wrapper">
+                <a href="#!" class="brand-logo">Page test</a>
+                <ul class="right hide-on-med-and-down">
+                    <% structure.forEach(function(navelement){ %>
+                    <li><a class="dropdown-trigger" href="#!" data-target="nav<%= navelement.id %>"><%= navelement.title %></a></li>
+                    <% }); %>
+                </ul>
+            </div>
+        </nav>
+
+        <script type="text/javascript" src="/javascripts/jquery.js"></script>
+        <script type="text/javascript" src="/javascripts/materialize.min.js"></script>
+        <script type="text/javascript" src="/javascripts/imports.js"></script>
+    </body>
+</html>
