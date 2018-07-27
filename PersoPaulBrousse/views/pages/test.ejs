@@ -15,11 +15,15 @@
         <ul id="nav<%= navelement.id %>" class="dropdown-content">
             <% navelement.NavigationSubElements.forEach(function(navsubelement){ %>
             <% 
-            var link;
+            if(navsubelement.title != navelement.title){ %>
+
+            <% var link;
             if(navsubelement.type == "LINK"){ %>
             <li><a href='<%= "/public/images/" + navsubelement.PageLink.link; %>' download="<%= navsubelement.PageLink.link %>"><%= navsubelement.title %></a></li>
             <% } else { %>
             <li><a href='<%= "/" + navelement.title + "/" + navsubelement.title; %>'><%= navsubelement.title %></a></li>
+            <% } %>
+
             <% } %>
 
             <% }); %>
@@ -36,9 +40,9 @@
                 </ul>
             </div>
         </nav>
-        
+
         <% if(type.localeCompare("CONTENT") == 0){ %>
-                <%- content[0].content %>
+        <%- content[0].content %>
         <% } %>
 
         <script type="text/javascript" src="/javascripts/jquery.js"></script>
