@@ -24,17 +24,20 @@ router.get('/gestion/documents', function(req, res, next){
         res.redirect("/admin/connexion");
     } else {
         var arr = [];
+	
         fs.readdirSync("./public/images").forEach(file => {
             arr.push(file);
         });
-        res.render("pages/gestion-document-admin", {
+	
+	res.render("pages/gestion-document-admin", {
             files: arr
         });
     };
 });
 
 router.post('/gestion/documents', function(req, res, next){
-    if(!req.session.connected){
+    try{
+	if(!req.session.connected){
         res.redirect("/admin/connexion");
     } else {
         var form = new formidable.IncomingForm();
@@ -53,6 +56,9 @@ router.post('/gestion/documents', function(req, res, next){
             });
         });
     }
+}catch(error){
+console.log(error);
+}
 });
 
 router.post('/gestion/documents/delete', function(req, res, next){
