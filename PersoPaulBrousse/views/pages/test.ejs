@@ -36,6 +36,10 @@
                 </ul>
             </div>
         </nav>
+        
+        <% if(type.localeCompare("CONTENT") == 0){ %>
+                <%- content[0].content %>
+        <% } %>
 
         <script type="text/javascript" src="/javascripts/jquery.js"></script>
         <script type="text/javascript" src="/javascripts/materialize.min.js"></script>

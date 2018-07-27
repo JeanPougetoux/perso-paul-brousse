@@ -356,4 +356,92 @@ $(document).ready(function(){
             });
         }
     });
+    
+    $(".add-content").click(function(){
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'navsubelementid': $(this).find("input").val(),
+            },
+            url: "/admin/gestion/navsubelement/addcontent",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                swal("Félicitation", msg.success, "success").then(function(){
+                    location.reload();
+                });
+            }
+        });
+    });
+    
+    $(".delete-content").click(function(){
+        console.log($(this).find("input").val());
+       swal({
+            title: "Etes-vous sûr ?",
+            text: "Voulez-vous vraiment supprimer ce contenu ?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if(!willDelete){
+                return;
+            }
+            $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'contentid': $(this).find("input").val(),
+            },
+            url: "/admin/gestion/navsubelement/deletecontent",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", JSON.stringify(jqXHR), "error");
+            },
+            success: function (msg) {
+                swal("Félicitation", msg.success, "success").then(function(){
+                    location.reload();
+                });
+            }
+        });
+        }).catch(err => {
+            if (err) {
+                swal("Erreur", "Une erreur est arrivée !", "error");
+            } else {
+                swal.close();
+            }
+        }); 
+    });
+    
+    $(".change-content").click(function(){
+        var instance = M.Modal.getInstance($("#content-modal"));
+        instance.open();
+        $("#content-area").val($(this).find("input.content-content").val());
+        $("#id-content").val($(this).find("input.content-id").val());
+        M.textareaAutoResize($('#content-area'));
+        $("#label-content").addClass("active");
+    });
+    
+    $(".save-content").click(function(){
+        const newtext = $("#content-area").val();
+        const idcontent = $(this).find("input").val();
+        
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'id': idcontent,
+                'content': newtext
+            },
+            url: "/admin/gestion/pagecontent/modify",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                swal("Félicitation", msg.success, "success").then(function(){
+                   location.reload(); 
+                });
+            }
+        });
+    });
 });

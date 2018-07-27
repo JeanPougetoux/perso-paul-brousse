@@ -30,15 +30,22 @@ router.get('/gestion/:id', function(req, res, next){
             } else {
                 if(element.type.localeCompare("CONTENT") == 0){
                     models.PageContent.findAll({
-                        where: { NavigationSubElementId: req.params.id }
+                        where: { NavigationSubElementId: req.params.id },
+                        order: [
+                            ['order', 'ASC'],
+                        ]
                     }).then(function(pagecontents){
-                        
+                        res.render("pages/gestion-content-admin", {
+                            idpage: element.id,
+                            page: element.title,
+                            contents: pagecontents
+                        });
                     }).catch(function(error){
 
                     });
                 }
                 else {
-
+                    res.redirect("/admin/gestion");
                 }
             }
         })
@@ -479,4 +486,109 @@ router.post('/gestion/navsubelement/updatelink', function(req, res, next){
     });
 });
 
+router.post('/gestion/navsubelement/addcontent', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.navsubelementid == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+
+    models.NavigationSubElement.findOne({
+        where: { id: req.body.navsubelementid }
+    }).then(function(nav){
+        if(nav.type.localeCompare("CONTENT") != 0){
+            return res.status(500).json({'error': "L'élément de sous-navigation n'est pas de type content"});
+        } else {
+            models.PageContent.max('order', { where: { NavigationSubElementId: req.body.navsubelementid } }).then(function(max){
+                if(!max){
+                    max = 0;
+                }
+                models.PageContent.create({
+                    content: "",
+                    order: max + 1,
+                    NavigationSubElementId: req.body.navsubelementid
+                }).then(function(content){
+                   return res.status(200).json({'success': "L'élément de contenu a bien été créé"}); 
+                }).catch(function(error){
+                    
+                });
+            }).catch(function(error){
+                
+            });
+        }
+    })
+});
+
+router.post('/gestion/navsubelement/deletecontent', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.contentid == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+
+    models.PageContent.findOne({
+        where: {
+            id: req.body.contentid
+        }
+    }).then(function(pc){
+        if(pc){
+            var orderpc = JSON.parse(JSON.stringify(pc.order));
+            var subelement = JSON.parse(JSON.stringify(pc.NavigationSubElementId));
+            
+            pc.destroy({force: true}).then(function(){
+                models.PageContent.findAll({
+                    where:{
+                        order: { [op.gt]: orderpc },
+                        NavigationSubElementId: subelement
+                    },
+                    order: [
+                        ['order', 'ASC'],
+                    ]
+                }).then(function(pcs){
+                    pcs.forEach(function(pc){
+                        pc.order = pc.order - 1;
+                        pc.save();
+                    });
+                    return res.status(200).json({'success': "Element de contenu bien supprimé"});
+                }).catch(function(error){
+                    
+                });
+            }).catch(function(error){
+            });
+        } else {
+            return res.status(404).json({'error': "Le content correspondant à cet id n'existe pas"});
+        }
+    });
+});
+
+router.post('/gestion/pagecontent/modify', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.id == null || req.body.content == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+    
+    models.PageContent.findOne({
+        where: {
+            id: req.body.id
+        }
+    }).then(function(pc){
+        if(pc){
+            pc.content = req.body.content;
+            pc.save().then(function(){
+               return res.status(200).json({'success': "Le contenu du content a bien été modifié"}); 
+            });
+        } else {
+            return res.status(404).json({'error': "Le content correspondant à cet id n'existe pas"});
+        }
+    }).catch(function(error){
+        
+    });
+});
 module.exports = router;

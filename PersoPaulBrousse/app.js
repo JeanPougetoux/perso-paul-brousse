@@ -3,8 +3,9 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
-var session = require('express-session')
+var session = require('express-session');
 
+var common = require('./routes/commune');
 var test = require('./routes/test');
 var admin = require('./routes/admin');
 var models = require("./models");
@@ -27,6 +28,7 @@ app.use(session({ secret: 'persopaulbrousse2018' }));
 
 app.use('/test', test);
 app.use('/admin', admin);
+app.use('/', common);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
