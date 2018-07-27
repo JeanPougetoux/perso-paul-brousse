@@ -356,7 +356,7 @@ $(document).ready(function(){
             });
         }
     });
-    
+
     $(".add-content").click(function(){
         $.ajax({
             type: 'POST',
@@ -375,10 +375,10 @@ $(document).ready(function(){
             }
         });
     });
-    
+
     $(".delete-content").click(function(){
         console.log($(this).find("input").val());
-       swal({
+        swal({
             title: "Etes-vous sûr ?",
             text: "Voulez-vous vraiment supprimer ce contenu ?",
             icon: "warning",
@@ -389,21 +389,21 @@ $(document).ready(function(){
                 return;
             }
             $.ajax({
-            type: 'POST',
-            dataType: 'json',
-            data: {
-                'contentid': $(this).find("input").val(),
-            },
-            url: "/admin/gestion/navsubelement/deletecontent",
-            error: function (jqXHR, textStatus, errorThrown) {
-                swal("Erreur", jqXHR.responseJSON.error, "error");
-            },
-            success: function (msg) {
-                swal("Félicitation", msg.success, "success").then(function(){
-                    location.reload();
-                });
-            }
-        });
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'contentid': $(this).find("input").val(),
+                },
+                url: "/admin/gestion/navsubelement/deletecontent",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    swal("Erreur", jqXHR.responseJSON.error, "error");
+                },
+                success: function (msg) {
+                    swal("Félicitation", msg.success, "success").then(function(){
+                        location.reload();
+                    });
+                }
+            });
         }).catch(err => {
             if (err) {
                 swal("Erreur", "Une erreur est arrivée !", "error");
@@ -412,7 +412,7 @@ $(document).ready(function(){
             }
         }); 
     });
-    
+
     $(".change-content").click(function(){
         var instance = M.Modal.getInstance($("#content-modal"));
         instance.open();
@@ -421,11 +421,11 @@ $(document).ready(function(){
         M.textareaAutoResize($('#content-area'));
         $("#label-content").addClass("active");
     });
-    
+
     $(".save-content").click(function(){
         const newtext = $("#content-area").val();
         const idcontent = $(this).find("input").val();
-        
+
         $.ajax({
             type: 'POST',
             dataType: 'json',
@@ -439,7 +439,26 @@ $(document).ready(function(){
             },
             success: function (msg) {
                 swal("Félicitation", msg.success, "success").then(function(){
-                   location.reload(); 
+                    location.reload(); 
+                });
+            }
+        });
+    });
+
+    $(".delete-link").click(function(){
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'filename': $(this).find("input").val(),
+            },
+            url: "/admin/gestion/documents/delete",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                swal("Félicitation", msg.success, "success").then(function(){
+                    location.reload(); 
                 });
             }
         });

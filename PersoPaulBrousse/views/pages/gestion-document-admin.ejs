@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>admin image page</title>
+        <link rel='stylesheet' href='/stylesheets/style.css' />
+
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+
+        <ul>
+
+            <% files.forEach(function(file){ %>
+            <li>
+                <a href='<%= "/public/images/" + file; %>' download="<%= file %>"><%= file %></a>
+                <a class="delete-link btn-floating btn-small waves-effect waves-light red">
+                    <input type="hidden" value="<%= file %>" />
+                    <i class="material-icons">clear</i>
+                </a>
+            </li> 
+            <%} ); %>
+
+        </ul>
+
+        <form action="#" method="post" enctype="multipart/form-data">
+            <input type="file" name="filetoupload"><br>
+            <input type="submit">
+        </form>
+
+        <div class="fixed-action-btn">
+            <a href="/admin/gestion/" class="btn-floating btn-large blue lighten-3">
+                <i class="large material-icons">keyboard_backspace</i>
+            </a>
+        </div>
+
+        <script type="text/javascript" src="/javascripts/jquery.js"></script>
+        <script type="text/javascript" src="/javascripts/materialize.min.js"></script>
+        <script type="text/javascript" src="/javascripts/sweetalert.js"></script>
+        <script type="text/javascript" src="/javascripts/imports.js"></script>
+        <script type="text/javascript" src="/javascripts/actions.js"></script>
+    </body>
+</html>

@@ -1,6 +1,8 @@
 var express = require('express');
 var bcrypt = require('bcrypt');
 var waterfall = require('async-waterfall');
+var formidable = require('formidable');
+var fs = require('fs');
 var models = require('../models');
 var router = express.Router();
 var sequelize = require('sequelize');
@@ -15,6 +17,60 @@ router.get('/connexion', function(req, res, next) {
             error: ""
         });
     }
+});
+
+router.get('/gestion/documents', function(req, res, next){
+    if(!req.session.connected){
+        res.redirect("/admin/connexion");
+    } else {
+        var arr = [];
+        fs.readdirSync("./public/images").forEach(file => {
+            arr.push(file);
+        });
+        res.render("pages/gestion-document-admin", {
+            files: arr
+        });
+    };
+});
+
+router.post('/gestion/documents', function(req, res, next){
+    if(!req.session.connected){
+        res.redirect("/admin/connexion");
+    } else {
+        var form = new formidable.IncomingForm();
+        form.parse(req, function (err, fields, files) {
+            var oldpath = files.filetoupload.path;
+            var newpath = "./public/images/" + files.filetoupload.name;
+            fs.rename(oldpath, newpath, function (err) {
+                if (err) throw err;
+                var arr = [];
+                fs.readdirSync("./public/images").forEach(file => {
+                    arr.push(file);
+                });
+                res.render("pages/gestion-document-admin", {
+                    files: file
+                });
+            });
+        });
+    }
+});
+
+router.post('/gestion/documents/delete', function(req, res, next){
+    if(!req.session.connected){
+        res.redirect("/admin/connexion");
+    } 
+
+    if(req.body.filename == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+
+    fs.unlink('./public/images/' + req.body.filename, (err) => {
+        if (err) {
+            return res.status(404).json({'error': "Le fichier n'existe pas" + err});
+        } else {
+            return res.status(200).json({'success': "Le fichier a bien été supprimé !"});
+        }
+    });
 });
 
 router.get('/gestion/:id', function(req, res, next){
@@ -510,12 +566,12 @@ router.post('/gestion/navsubelement/addcontent', function(req, res, next){
                     order: max + 1,
                     NavigationSubElementId: req.body.navsubelementid
                 }).then(function(content){
-                   return res.status(200).json({'success': "L'élément de contenu a bien été créé"}); 
+                    return res.status(200).json({'success': "L'élément de contenu a bien été créé"}); 
                 }).catch(function(error){
-                    
+
                 });
             }).catch(function(error){
-                
+
             });
         }
     })
@@ -577,7 +633,7 @@ router.post('/gestion/pagecontent/modify', function(req, res, next){
     if(req.body.id == null || req.body.content == null){
         return res.status(500).json({'error': "Il manque un paramètre"});
     }
-    
+
     models.PageContent.findOne({
         where: {
             id: req.body.id
@@ -586,13 +642,13 @@ router.post('/gestion/pagecontent/modify', function(req, res, next){
         if(pc){
             pc.content = req.body.content;
             pc.save().then(function(){
-               return res.status(200).json({'success': "Le contenu du content a bien été modifié"}); 
+                return res.status(200).json({'success': "Le contenu du content a bien été modifié"}); 
             });
         } else {
             return res.status(404).json({'error': "Le content correspondant à cet id n'existe pas"});
         }
     }).catch(function(error){
-        
+
     });
 });
 module.exports = router;
