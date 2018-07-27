@@ -536,29 +536,33 @@ router.post('/gestion/navsubelement/deletecontent', function(req, res, next){
         }
     }).then(function(pc){
         if(pc){
-            var orderpc = JSON.parse(JSON.stringify(pc.order));
-            var subelement = JSON.parse(JSON.stringify(pc.NavigationSubElementId));
-            
-            pc.destroy({force: true}).then(function(){
-                models.PageContent.findAll({
-                    where:{
-                        order: { [op.gt]: orderpc },
-                        NavigationSubElementId: subelement
-                    },
-                    order: [
-                        ['order', 'ASC'],
-                    ]
-                }).then(function(pcs){
-                    pcs.forEach(function(pc){
-                        pc.order = pc.order - 1;
-                        pc.save();
+            if(pc.order != 1){
+                var orderpc = JSON.parse(JSON.stringify(pc.order));
+                var subelement = JSON.parse(JSON.stringify(pc.NavigationSubElementId));
+
+                pc.destroy({force: true}).then(function(){
+                    models.PageContent.findAll({
+                        where:{
+                            order: { [op.gt]: orderpc },
+                            NavigationSubElementId: subelement
+                        },
+                        order: [
+                            ['order', 'ASC'],
+                        ]
+                    }).then(function(pcs){
+                        pcs.forEach(function(pc){
+                            pc.order = pc.order - 1;
+                            pc.save();
+                        });
+                        return res.status(200).json({'success': "Element de contenu bien supprimé"});
+                    }).catch(function(error){
+
                     });
-                    return res.status(200).json({'success': "Element de contenu bien supprimé"});
                 }).catch(function(error){
-                    
                 });
-            }).catch(function(error){
-            });
+            } else {
+                return res.status(500).json({'error': "Il faut au moins un élément de contenu pour ce type d'élément de sous-navigation"});
+            }
         } else {
             return res.status(404).json({'error': "Le content correspondant à cet id n'existe pas"});
         }

@@ -396,7 +396,7 @@ $(document).ready(function(){
             },
             url: "/admin/gestion/navsubelement/deletecontent",
             error: function (jqXHR, textStatus, errorThrown) {
-                swal("Erreur", JSON.stringify(jqXHR), "error");
+                swal("Erreur", jqXHR.responseJSON.error, "error");
             },
             success: function (msg) {
                 swal("Félicitation", msg.success, "success").then(function(){
