@@ -51,7 +51,7 @@ router.post('/gestion/documents', function(req, res, next){
                     arr.push(file);
                 });
                 res.render("pages/gestion-document-admin", {
-                    files: file
+                    files: arr
                 });
             });
         });
