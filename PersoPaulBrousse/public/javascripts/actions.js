@@ -318,7 +318,7 @@ $(document).ready(function(){
     $(".content-sub-nav-element").click(function(){
         const id = $(this).find("input.navelementid").val();
         const type = $(this).find("input.navelementtype").val();
-        if(type.localeCompare("CONTENT") == 0){
+        if(type.localeCompare("CONTENT") == 0 || type.localeCompare("LIST") == 0){
             location.href = "/admin/gestion/" + id;
         }
         else if(type.localeCompare("LINK") == 0){
@@ -460,6 +460,42 @@ $(document).ready(function(){
                 swal("Félicitation", msg.success, "success").then(function(){
                     location.reload(); 
                 });
+            }
+        });
+    });
+    
+    $(".delete-article").click(function(){
+        swal({
+            title: "Etes-vous sûr ?",
+            text: "Voulez-vous vraiment supprimer l'article ?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if(!willDelete){
+                return;
+            }
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'navelementsubid': $(this).find("input").val()
+                },
+                url: "/admin/gestion/articles/delete",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    swal("Erreur", jqXHR.responseJSON.error, "error");
+                },
+                success: function (msg) {
+                    swal("Félicitation", msg.success, "success").then(function(){
+                        location.reload();  
+                    });
+                }
+            });
+        }).catch(err => {
+            if (err) {
+                swal("Erreur", "Une erreur est arrivée !", "error");
+            } else {
+                swal.close();
             }
         });
     });

@@ -24,12 +24,12 @@ router.get('/gestion/documents', function(req, res, next){
         res.redirect("/admin/connexion");
     } else {
         var arr = [];
-	
+
         fs.readdirSync("./public/images").forEach(file => {
             arr.push(file);
         });
-	
-	res.render("pages/gestion-document-admin", {
+
+        res.render("pages/gestion-document-admin", {
             files: arr
         });
     };
@@ -37,28 +37,28 @@ router.get('/gestion/documents', function(req, res, next){
 
 router.post('/gestion/documents', function(req, res, next){
     try{
-	if(!req.session.connected){
-        res.redirect("/admin/connexion");
-    } else {
-        var form = new formidable.IncomingForm();
-        form.parse(req, function (err, fields, files) {
-            var oldpath = files.filetoupload.path;
-            var newpath = "./public/images/" + files.filetoupload.name;
-            fs.rename(oldpath, newpath, function (err) {
-                if (err) throw err;
-                var arr = [];
-                fs.readdirSync("./public/images").forEach(file => {
-                    arr.push(file);
-                });
-                res.render("pages/gestion-document-admin", {
-                    files: arr
+        if(!req.session.connected){
+            res.redirect("/admin/connexion");
+        } else {
+            var form = new formidable.IncomingForm();
+            form.parse(req, function (err, fields, files) {
+                var oldpath = files.filetoupload.path;
+                var newpath = "./public/images/" + files.filetoupload.name;
+                fs.rename(oldpath, newpath, function (err) {
+                    if (err) throw err;
+                    var arr = [];
+                    fs.readdirSync("./public/images").forEach(file => {
+                        arr.push(file);
+                    });
+                    res.render("pages/gestion-document-admin", {
+                        files: arr
+                    });
                 });
             });
-        });
+        }
+    }catch(error){
+        console.log(error);
     }
-}catch(error){
-console.log(error);
-}
 });
 
 router.post('/gestion/documents/delete', function(req, res, next){
@@ -102,6 +102,19 @@ router.get('/gestion/:id', function(req, res, next){
                             page: element.title,
                             contents: pagecontents
                         });
+                    }).catch(function(error){
+
+                    });
+                }
+                else if(element.type.localeCompare("LIST") == 0){
+                    models.PageListElement.findAll({
+                        where: { NavigationSubElementId: req.params.id }
+                    }).then(function(pagelistelements){
+                        res.render("pages/gestion-articles-admin", {
+                            idpage: element.id,
+                            page: element.title,
+                            articles: pagelistelements
+                        }) 
                     }).catch(function(error){
 
                     });
@@ -248,7 +261,7 @@ router.post('/gestion/navsubelement/add', function(req, res, next){
                 });
             }
             else if(req.body.type.localeCompare("LIST") == 0){
-                models.PageList.create({
+                models.PageListElement.create({
                     title: "",
                     NavigationSubElementId: navsubelement.id
                 }).then(function(pagelist){
@@ -657,4 +670,33 @@ router.post('/gestion/pagecontent/modify', function(req, res, next){
 
     });
 });
+
+router.post('/gestion/articles/delete', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.navelementid == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+
+    models.NavigationElement.findOne({
+        where: { id: req.body.navelementid }
+    }).then(function(result){
+        result.destroy({force: true});
+        models.NavigationSubElement.findAll({
+            where: { NavigationElementId: req.body.navelementid }
+        }).then(function(results){
+            results.forEach(function(result){
+                result.destroy({force: true});
+            });
+            return res.status(200).json({'success': "L'élément de navigation a bien été supprimé"});
+        }).catch(function(error){
+
+        })
+    }).catch(function(error){
+
+    });
+});
+
 module.exports = router;

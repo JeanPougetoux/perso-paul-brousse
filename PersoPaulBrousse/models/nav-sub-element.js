@@ -12,7 +12,7 @@ module.exports = (sequelize, DataTypes) => {
         NavigationSubElement.belongsTo(models.NavigationElement, { foreignKey: { allowNull: false, unique: 'order' }});
         NavigationSubElement.hasMany(models.PageContent, { foreignKey: { allowNull: false }});
         NavigationSubElement.hasOne(models.PageLink, { foreignKey: { allowNull: false }});
-        NavigationSubElement.hasOne(models.PageList, { foreignKey: { allowNull: false }});
+        NavigationSubElement.hasOne(models.PageListElement, { foreignKey: { allowNull: false }});
     };
     return NavigationSubElement;
 };
