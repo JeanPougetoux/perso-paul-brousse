@@ -43,6 +43,16 @@
 
         <% if(type.localeCompare("CONTENT") == 0){ %>
         <%- content[0].content %>
+        <% } else if (type.localeCompare("LIST") == 0){ 
+            list.forEach(function(element){ %>
+            <ul class="collection">
+                <li class="collection-item avatar">
+                  <img src="/public/images/<%= element.illustration %>" alt="" class="circle">
+                  <span class="title"><%= element.title %></span>
+                    <p><%= element.description %></p>
+                </li>
+            </ul>
+            <% }); %>
         <% } %>
 
         <script type="text/javascript" src="/javascripts/jquery.js"></script>

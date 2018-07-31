@@ -53,7 +53,17 @@ router.get('/:page/:subpage', function(req, res, next){
                         } else if(nse.type.localeCompare("LINK") == 0){
 
                         } else if(nse.type.localeCompare("LIST") == 0){
-
+                            models.PageListElement.findAll({
+                                where: { NavigationSubElementId: nse.id }
+                            }).then(function(ples){
+                                res.render("pages/test", {
+                                    structure: results,
+                                    type: "LIST",
+                                    list: ples
+                                })
+                            }).catch(function(error){
+                                console.log(error);
+                            });
                         }
                     } else {
                         next(); // 404
@@ -118,9 +128,19 @@ router.get('/:page', function(req, res, next){
                                 console.log(error);
                             });
                         } else if(nse.type.localeCompare("LINK") == 0){
-
+                            next();
                         } else if(nse.type.localeCompare("LIST") == 0){
-
+                            models.PageListElement.findAll({
+                                where: { NavigationSubElementId: nse.id }
+                            }).then(function(ples){
+                                res.render("pages/test", {
+                                    structure: results,
+                                    type: "LIST",
+                                    list: ples
+                                })
+                            }).catch(function(error){
+                                console.log(error);
+                            });
                         }
                     } else {
                         next(); // 404
@@ -137,6 +157,10 @@ router.get('/:page', function(req, res, next){
     }).catch(function(error){
 
     });
+});
+
+router.get('/', function(req, res, next){
+   res.redirect("/accueil")
 });
 
 module.exports = router;
