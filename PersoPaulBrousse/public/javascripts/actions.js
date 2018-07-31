@@ -479,7 +479,7 @@ $(document).ready(function(){
                 type: 'POST',
                 dataType: 'json',
                 data: {
-                    'navelementsubid': $(this).find("input").val()
+                    'listelementid': $(this).find("input").val()
                 },
                 url: "/admin/gestion/articles/delete",
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -496,6 +496,137 @@ $(document).ready(function(){
                 swal("Erreur", "Une erreur est arrivée !", "error");
             } else {
                 swal.close();
+            }
+        });
+    });
+    
+    $("#trigger-modal-articles").click(function(){
+        $("#validate-modal").attr('class', 'add-article waves-effect waves-green btn-flat');
+        $("#validate-modal").find("input.idarticle").val("");
+        $("#title-modal").text("Ajouter un article");
+        $(".element").hide();
+        $(".add-element").show();
+        
+        $("#title").val("");
+        $("#label-title").removeClass("active");
+        $("#description").val("");
+        $("#label-description").removeClass("active");
+        $("#illustration").val("");
+        $("#label-illustration").removeClass("active");
+        $("#type").val("CONTENT");
+        $('select').formSelect();
+        $("#content").val("");
+        $("#label-content").removeClass("active");
+        
+        M.Modal.getInstance($("#modal-articles")).open();
+    });
+    
+    $(".modify-article").click(function(){
+        var article = JSON.parse($(this).find("input").val());
+        console.log(article);
+        $("#validate-modal").attr('class', 'valid-modify-article waves-effect waves-green btn-flat');
+        $("#validate-modal").find("input.idarticle").val(article.id);
+        $("#title-modal").text("Modifier un article");
+        $(".element").hide();
+        $(".modify-element").show();
+        
+        $("#title").val(article.title);
+        $("#label-title").addClass("active");
+        $("#description").val(article.description);
+        $("#label-description").addClass("active");
+        $("#illustration").val(article.illustration);
+        $("#label-illustration").addClass("active");
+        $("#type").val(article.type);
+        $('select').formSelect();
+        
+        M.Modal.getInstance($("#modal-articles")).open();
+    });
+    
+    $(".content-article").click(function(){
+        $("#validate-modal").attr('class', 'valid-modify-article-content waves-effect waves-green btn-flat');
+        $("#validate-modal").find("input.idarticle").val($(this).find("input").val());
+        $("#title-modal").text("Modifier le contenu d'un article");
+        $(".element").hide();
+        $(".modify-content-element").show();
+        
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: "/admin/article/" + $(this).find("input").val() + "/content",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                $("#content").val(msg.success.content);
+                $("#label-content").addClass("active");
+                M.Modal.getInstance($("#modal-articles")).open();
+            }
+        });
+    });
+    
+    $(document).on("click", ".add-article", function(){
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'title': $("#title").val(),
+                'description': $("#description").val(),
+                'illustration': $("#illustration").val(),
+                'content': $("#content").val(),
+                'type': $("#type").val(),
+                'subnavid': $(this).find("input.idpage").val()
+            },
+            url: "/admin/gestion/articles/add",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                swal("Félicitation", msg.success, "success").then(function(){
+                    location.reload();  
+                });
+            }
+        });
+    });
+    
+    $(document).on("click", ".valid-modify-article", function(){
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'id': $("#validate-modal").find("input.idarticle").val(),
+                'title': $("#title").val(),
+                'description': $("#description").val(),
+                'illustration': $("#illustration").val(),
+                'type': $("#type").val(),
+            },
+            url: "/admin/gestion/articles/modify",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                swal("Félicitation", msg.success, "success").then(function(){
+                    location.reload();  
+                });
+            }
+        });
+    });
+    
+    $(document).on("click", ".valid-modify-article-content", function(){
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'id': $("#validate-modal").find("input.idarticle").val(),
+                'content': $("#content").val(),
+            },
+            url: "/admin/gestion/articles/content/modify",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                swal("Félicitation", msg.success, "success").then(function(){
+                    location.reload();  
+                });
             }
         });
     });

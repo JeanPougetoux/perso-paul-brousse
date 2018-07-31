@@ -35,50 +35,6 @@ router.get('/gestion/documents', function(req, res, next){
     };
 });
 
-router.post('/gestion/documents', function(req, res, next){
-    try{
-        if(!req.session.connected){
-            res.redirect("/admin/connexion");
-        } else {
-            var form = new formidable.IncomingForm();
-            form.parse(req, function (err, fields, files) {
-                var oldpath = files.filetoupload.path;
-                var newpath = "./public/images/" + files.filetoupload.name;
-                fs.rename(oldpath, newpath, function (err) {
-                    if (err) throw err;
-                    var arr = [];
-                    fs.readdirSync("./public/images").forEach(file => {
-                        arr.push(file);
-                    });
-                    res.render("pages/gestion-document-admin", {
-                        files: arr
-                    });
-                });
-            });
-        }
-    }catch(error){
-        console.log(error);
-    }
-});
-
-router.post('/gestion/documents/delete', function(req, res, next){
-    if(!req.session.connected){
-        res.redirect("/admin/connexion");
-    } 
-
-    if(req.body.filename == null){
-        return res.status(500).json({'error': "Il manque un paramètre"});
-    }
-
-    fs.unlink('./public/images/' + req.body.filename, (err) => {
-        if (err) {
-            return res.status(404).json({'error': "Le fichier n'existe pas" + err});
-        } else {
-            return res.status(200).json({'success': "Le fichier a bien été supprimé !"});
-        }
-    });
-});
-
 router.get('/gestion/:id', function(req, res, next){
     if(!req.session.connected){
         res.redirect("/admin/connexion");
@@ -108,7 +64,8 @@ router.get('/gestion/:id', function(req, res, next){
                 }
                 else if(element.type.localeCompare("LIST") == 0){
                     models.PageListElement.findAll({
-                        where: { NavigationSubElementId: req.params.id }
+                        where: { NavigationSubElementId: req.params.id },
+                        attributes: ["id", "createdAt", "NavigationSubElementId", "description", "title", "illustration", "type"]
                     }).then(function(pagelistelements){
                         res.render("pages/gestion-articles-admin", {
                             idpage: element.id,
@@ -155,12 +112,77 @@ router.get('/gestion', function(req, res, next){
     }
 });
 
+router.get('/article/:id/content', function(req, res, next){
+    if(!req.session.connected){
+        res.redirect("/admin/connexion");
+    } 
+    else {
+        models.PageListElement.findOne({
+            where: {
+                id: req.params.id
+            }
+        }).then(function(element){
+            if(!element){
+                return res.status(404).json({'error': "L'élément de liste n'existe pas"})
+            } else {
+                return res.status(200).json({'success': element});
+            }
+        }).catch(function(error){
+
+        });
+    }
+});
+
 router.get('/', function(req, res, next){
     if(req.session.connected){ 
         res.redirect("/admin/gestion");
     } else {
         res.redirect("/admin/connexion");
     } 
+});
+
+router.post('/gestion/documents', function(req, res, next){
+    try{
+        if(!req.session.connected){
+            res.redirect("/admin/connexion");
+        } else {
+            var form = new formidable.IncomingForm();
+            form.parse(req, function (err, fields, files) {
+                var oldpath = files.filetoupload.path;
+                var newpath = "./public/images/" + files.filetoupload.name;
+                fs.rename(oldpath, newpath, function (err) {
+                    if (err) throw err;
+                    var arr = [];
+                    fs.readdirSync("./public/images").forEach(file => {
+                        arr.push(file);
+                    });
+                    res.render("pages/gestion-document-admin", {
+                        files: arr
+                    });
+                });
+            });
+        }
+    }catch(error){
+        console.log(error);
+    }
+});
+
+router.post('/gestion/documents/delete', function(req, res, next){
+    if(!req.session.connected){
+        res.redirect("/admin/connexion");
+    } 
+
+    if(req.body.filename == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+
+    fs.unlink('./public/images/' + req.body.filename, (err) => {
+        if (err) {
+            return res.status(404).json({'error': "Le fichier n'existe pas" + err});
+        } else {
+            return res.status(200).json({'success': "Le fichier a bien été supprimé !"});
+        }
+    });
 });
 
 router.post('/connexion', function(req, res, next) {
@@ -255,16 +277,6 @@ router.post('/gestion/navsubelement/add', function(req, res, next){
                     link: "",
                     NavigationSubElementId: navsubelement.id
                 }).then(function(pagelink){
-                    return res.status(200).json({'success': "L'élément de sous-navigation a bien été ajouté !"});
-                }).catch(function(error){
-
-                });
-            }
-            else if(req.body.type.localeCompare("LIST") == 0){
-                models.PageListElement.create({
-                    title: "",
-                    NavigationSubElementId: navsubelement.id
-                }).then(function(pagelist){
                     return res.status(200).json({'success': "L'élément de sous-navigation a bien été ajouté !"});
                 }).catch(function(error){
 
@@ -676,26 +688,95 @@ router.post('/gestion/articles/delete', function(req, res, next){
         return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
     }
 
-    if(req.body.navelementid == null){
+    if(req.body.listelementid == null){
         return res.status(500).json({'error': "Il manque un paramètre"});
     }
 
-    models.NavigationElement.findOne({
-        where: { id: req.body.navelementid }
+    models.PageListElement.findOne({
+        where: { id: req.body.listelementid }
     }).then(function(result){
         result.destroy({force: true});
-        models.NavigationSubElement.findAll({
-            where: { NavigationElementId: req.body.navelementid }
-        }).then(function(results){
-            results.forEach(function(result){
-                result.destroy({force: true});
-            });
-            return res.status(200).json({'success': "L'élément de navigation a bien été supprimé"});
-        }).catch(function(error){
-
-        })
+        return res.status(200).json({'success': "L'élément a bien été supprimé"});
     }).catch(function(error){
 
+    });
+});
+
+router.post('/gestion/articles/add', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.title == null || req.body.description == null || req.body.illustration == null || req.body.content == null || req.body.type == null || req.body.subnavid == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+    
+    models.PageListElement.create({
+        title: req.body.title,
+        description: req.body.description,
+        illustration: req.body.illustration,
+        content: req.body.content,
+        type: req.body.type,
+        NavigationSubElementId: req.body.subnavid
+    }).then(function(element){
+       return res.status(200).json({'success': "L'article a bien été créé"}); 
+    }).catch(function(error){
+        console.log(error);
+    });
+});
+
+router.post('/gestion/articles/modify', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.id == null || req.body.title == null || req.body.description == null || req.body.illustration == null || req.body.type == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+    
+    models.PageListElement.findOne({
+        where: {
+            id: req.body.id
+        }
+    }).then(function(element){
+       if(element){
+            element.title = req.body.title,
+            element.description = req.body.description,
+            element.illustration = req.body.illustration,
+            element.type = req.body.type
+           element.save();
+           return res.status(200).json({'success': "L'élément de liste a bien été modifié"});
+       } else {
+           return res.status(404).json({'error': "L'élément de liste n'existe pas"});
+       }
+    }).catch(function(error){
+        console.log(error);
+    });
+});
+
+router.post('/gestion/articles/content/modify', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.id == null || req.body.content == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+    
+    models.PageListElement.findOne({
+        where: {
+            id: req.body.id
+        }
+    }).then(function(element){
+       if(element){
+        element.content = req.body.content
+           element.save();
+           return res.status(200).json({'success': "L'élément de liste a bien été modifié"});
+       } else {
+           return res.status(404).json({'error': "L'élément de liste n'existe pas"});
+       }
+    }).catch(function(error){
+        console.log(error);
     });
 });
 
