@@ -8,6 +8,7 @@ var session = require('express-session');
 var common = require('./routes/commune');
 var test = require('./routes/test');
 var admin = require('./routes/admin');
+var newsletter = require('./routes/newsletter');
 var models = require("./models");
 
 var app = express();
@@ -26,6 +27,7 @@ app.use("/public/images", express.static("public/images"));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({ secret: 'persopaulbrousse2018' }));
 
+app.use('/newsletter', newsletter);
 app.use('/test', test);
 app.use('/admin', admin);
 app.use('/', common);

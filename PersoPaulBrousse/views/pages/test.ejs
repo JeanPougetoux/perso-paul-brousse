@@ -10,6 +10,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
+        
+        <% include ../partials/newsletter %>
 
         <% structure.forEach(function(navelement){ %>
         <ul id="nav<%= navelement.id %>" class="dropdown-content">
@@ -37,6 +39,7 @@
                     <% structure.forEach(function(navelement){ %>
                     <li><a class="dropdown-trigger" href="#!" data-target="nav<%= navelement.id %>"><%= navelement.title %></a></li>
                     <% }); %>
+                  <li><a class="waves-effect waves-light btn modal-trigger" href="#modal-newsletter">newsletter</a>
                 </ul>
             </div>
         </nav>
@@ -57,6 +60,8 @@
 
         <script type="text/javascript" src="/javascripts/jquery.js"></script>
         <script type="text/javascript" src="/javascripts/materialize.min.js"></script>
+        <script type="text/javascript" src="/javascripts/sweetalert.js"></script>
         <script type="text/javascript" src="/javascripts/imports.js"></script>
+        <script type="text/javascript" src="/javascripts/user-actions.js"></script>
     </body>
 </html>
