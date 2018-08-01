@@ -42,7 +42,7 @@ router.get('/:page/:subpage', function(req, res, next){
                             models.PageContent.findAll({
                                 where: { NavigationSubElementId: nse.id }
                             }).then(function(pcs){
-                                res.render("pages/test", {
+                                res.render("pages/commune", {
                                     structure: results,
                                     type: "CONTENT",
                                     content: pcs
@@ -56,7 +56,7 @@ router.get('/:page/:subpage', function(req, res, next){
                             models.PageListElement.findAll({
                                 where: { NavigationSubElementId: nse.id }
                             }).then(function(ples){
-                                res.render("pages/test", {
+                                res.render("pages/commune", {
                                     structure: results,
                                     type: "LIST",
                                     list: ples
@@ -119,7 +119,7 @@ router.get('/:page', function(req, res, next){
                             models.PageContent.findAll({
                                 where: { NavigationSubElementId: nse.id }
                             }).then(function(pcs){
-                                res.render("pages/test", {
+                                res.render("pages/commune", {
                                     structure: results,
                                     type: "CONTENT",
                                     content: pcs
@@ -133,7 +133,7 @@ router.get('/:page', function(req, res, next){
                             models.PageListElement.findAll({
                                 where: { NavigationSubElementId: nse.id }
                             }).then(function(ples){
-                                res.render("pages/test", {
+                                res.render("pages/commune", {
                                     structure: results,
                                     type: "LIST",
                                     list: ples
