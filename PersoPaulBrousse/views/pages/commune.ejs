@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>
-            Paul Brousse CGT
+            
         </title>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -12,20 +12,20 @@
     </head>
     <body>
         <div id="hide-zone"></div>
-        <img id="logo" src="/images/logo.png">
+        <img id="logo" src="/images/log.png" onerror="this.src='/images/defaut.jpg'">
 
         <div id="slideshow">
             <div class="slideshow-container">
                 <div class="mySlides fade">
-                    <img src="/images/cgt1.png">
+                    <img src="/images/cgt.png" onerror="this.src='/images/defaut.jpg'">
                 </div>
 
                 <div class="mySlides fade">
-                    <img src="/images/cgt2.png">
+                    <img src="/images/cgt.png" onerror="this.src='/images/defaut.jpg'">
                 </div>
 
                 <div class="mySlides fade">
-                    <img src="/images/cgt3.png" >
+                    <img src="/images/cgt.png" onerror="this.src='/images/defaut.jpg'">
                 </div>
             </div>
 
@@ -59,7 +59,7 @@
                     if(navelement.NavigationSubElements[0].type == "LINK"){ %>
             <li><a href='<%= "/public/images/" + navelement.NavigationSubElements[0].PageLink.link; %>' download="<%= navelement.NavigationSubElements[0].PageLink.link %>"><%= navelement.NavigationSubElements[0].title %></a></li>
             <% } else { %> 
-            <li><a href="/<%= navelement.title %>"><%= navelement.title %></a></li>
+            <li><a href="/<%= navelement.title %>/"><%= navelement.title %></a></li>
             <% } %>
             <% } else { %>
             <li class="no-padding">
@@ -72,7 +72,7 @@
                                 <% if(navsubelement.type == "LINK"){ %>
                                 <li><a href='<%= "/public/images/" + navsubelement.PageLink.link; %>' download="<%= navsubelement.PageLink.link %>"><%= navsubelement.title %></a></li>
                                 <% } else { %> 
-                                <li><a href="/<%= navelement.title %>/<%= navsubelement.title %>"><%= navsubelement.title %></a></li>
+                                <li><a href="/<%= navelement.title %>/<%= navsubelement.title %>/"><%= navsubelement.title %></a></li>
                                 <% } %>
                                 <% }); %>
                             </ul>
@@ -93,7 +93,7 @@
             <i class="tiny material-icons red-icon">local_phone
             </i> 01.45.59.32.71<br>
             <i class="tiny material-icons red-icon"> mail
-            </i> paul-brousse.cgt@pbr.aphp.fr
+            </i> 
         </div>
 
         <div id="main">
@@ -106,13 +106,16 @@
             <% } else if (type.localeCompare("LIST") == 0){ 
                 list.forEach(function(element){ %>
             <ul class="collection">
-                <li class="collection-item avatar">
-                    <img src="/public/images/<%= element.illustration %>" alt="" class="circle">
+                <li class="collection-item avatar special-avat">
+                    <img src="/public/images/<%= element.illustration %>" onerror="this.src='/images/defaut.jpg'"  class="circle">
                     <span class="title"><%= element.title %></span>
                     <p><%= element.description %></p>
+                    <a class="secondary-content access-content"><input type="hidden" class="id" value="<%= element.id %>" /><input type="hidden" class="type" value="<%= element.type %>" /><i class="material-icons red-icon">dehaze</i></a>
                 </li>
             </ul>
             <% }); %>
+            <% } else if (type.localeCompare("ARTICLE") == 0){ %>
+                <%- content %>
             <% } %>
             <div id="hr-zone-bottom">
                 <hr>
@@ -125,6 +128,7 @@
         <script type="text/javascript" src="/javascripts/sweetalert.js"></script>
         <script type="text/javascript" src="/javascripts/imports.js"></script>
         <script type="text/javascript" src="/javascripts/carousel.js"></script>
+        <script type="text/javascript" src="/javascripts/user-actions.js"></script>
 
     </body>
 </html>

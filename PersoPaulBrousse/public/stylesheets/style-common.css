@@ -182,3 +182,17 @@ i.red-icon{
     border:0 none !important;
     width:185px !important;
 }
+
+.circle {
+    border-radius: 10% !important;
+    width: 62px !important;
+    height: 62px !important;
+}
+
+.special-avat{
+    padding-left: 90px !important;
+}
+
+a:hover {
+ cursor:pointer;
+}
