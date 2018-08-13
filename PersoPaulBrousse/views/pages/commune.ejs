@@ -11,6 +11,26 @@
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
     </head>
     <body>
+        <div id="modal-newsletter" class="modal">
+            <div class="modal-content">
+                <h4 id="title-modal">Inscription à la newsletter</h4>
+
+                <div class= "row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="input-field col s12">
+                                <input id="email" type="email">
+                                <label id="label-mail" for="email">Email</label>
+                            </div>
+                        </div>
+                        <div class="row center-align">
+                            <a id="subscribe-button" class="waves-effect waves-light btn btn-large">Valider</a>
+                        </div>
+                    </form>
+                </div>
+
+            </div>
+        </div>  
         <div id="hide-zone"></div>
         <img id="logo" src="/images/log.png" onerror="this.src='/images/defaut.jpg'">
 
@@ -46,9 +66,9 @@
 
 
             <div id="social">
-                <a href="https://www.facebook.com/Cgt-Paul-Brousse-1402818630035962/" target="_blank" class="fab fa-facebook fa-2x"></a>
-                <a href="#" class="fab fa-twitter-square fa-2x"></a>
-                <a href="#" class="fab fa-youtube-square fa-2x"></a>
+                <a href="https://www.facebook.com/Cgt-Paul-Brousse-1402818630035962/" target="_blank" class="fab fa-facebook fa-3x"></a>
+                <a href="#" class="fab fa-twitter-square fa-3x"></a>
+                <a href="#" class="fab fa-youtube-square fa-3x"></a>
             </div>
 
             <% structure.forEach(function(navelement){
@@ -84,11 +104,12 @@
             <% }); %>
             <li><a>Newsletter</a></li>
             <li><a>Adhérer</a></li>
+            <li><a class="waves-effect waves-light btn modal-trigger" href="#modal-newsletter">Modal</a></li>
         </ul>
 
         <div id="contact-informations">
             <i class="tiny material-icons red-icon">location_on
-            </i> 2 rue paul Vaillant-Couturier<br>
+            </i> 12 avenue Paul Vaillant-Couturier<br>
             <span id="city">94800 VILLEJUIF, <span id="bat">Bât. JJ ROUSSEAU</span></span><br>
             <i class="tiny material-icons red-icon">local_phone
             </i> 01.45.59.32.71<br>
