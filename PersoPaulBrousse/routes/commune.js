@@ -57,17 +57,30 @@ router.get('/:page/:subpage/:article', function(req, res, next){
                                 type: "CONTENT"
                             }
                         }).then(function(article){
-                           if(article){
-                               res.render("pages/commune", {
-                                    structure: results,
-                                    type: "ARTICLE",
-                                    content: article.content
-                                })
-                           } else {
-                               next(); // 404
-                           }
+                            if(article){
+                                models.SlideElement.findOne({
+                                    where: {
+                                        name: "Slideshow"
+                                    }
+                                }).then(function(slideshow){
+                                    if(slideshow){
+                                        res.render("pages/commune", {
+                                            structure: results,
+                                            type: "ARTICLE",
+                                            content: article.content,
+                                            slideshow: slideshow.content
+                                        });
+                                    } else {
+                                        next();
+                                    }
+                                }).catch(function(error){
+
+                                });
+                            } else {
+                                next(); // 404
+                            }
                         }).catch(function(error){
-                            
+
                         });
                     } else {
                         next(); // 404
@@ -122,34 +135,48 @@ router.get('/:page/:subpage', function(req, res, next){
                     }
                 }).then(function(nse){
                     if(nse){
-                        if(nse.type.localeCompare("CONTENT") == 0){
-                            models.PageContent.findAll({
-                                where: { NavigationSubElementId: nse.id }
-                            }).then(function(pcs){
-                                res.render("pages/commune", {
-                                    structure: results,
-                                    type: "CONTENT",
-                                    content: pcs
-                                });
-                            }).catch(function(error){
-                                console.log(error);
-                            });
-                        } else if(nse.type.localeCompare("LINK") == 0){
+                        models.SlideElement.findOne({
+                            where: {
+                                name: "Slideshow"
+                            }
+                        }).then(function(slideshow){
+                            if(slideshow){
+                                if(nse.type.localeCompare("CONTENT") == 0){
+                                    models.PageContent.findAll({
+                                        where: { NavigationSubElementId: nse.id }
+                                    }).then(function(pcs){
+                                        res.render("pages/commune", {
+                                            structure: results,
+                                            type: "CONTENT",
+                                            content: pcs,
+                                            slideshow: slideshow.content
+                                        });
+                                    }).catch(function(error){
+                                        console.log(error);
+                                    });
+                                } else if(nse.type.localeCompare("LINK") == 0){
 
-                        } else if(nse.type.localeCompare("LIST") == 0){
-                            models.PageListElement.findAll({
-                                where: { NavigationSubElementId: nse.id },
-                                attributes: ["id", "illustration", "title", "description", "type"]
-                            }).then(function(ples){
-                                res.render("pages/commune", {
-                                    structure: results,
-                                    type: "LIST",
-                                    list: ples
-                                })
-                            }).catch(function(error){
-                                console.log(error);
-                            });
-                        }
+                                } else if(nse.type.localeCompare("LIST") == 0){
+                                    models.PageListElement.findAll({
+                                        where: { NavigationSubElementId: nse.id },
+                                        attributes: ["id", "illustration", "title", "description", "type"]
+                                    }).then(function(ples){
+                                        res.render("pages/commune", {
+                                            structure: results,
+                                            type: "LIST",
+                                            list: ples,
+                                            slideshow: slideshow.content
+                                        })
+                                    }).catch(function(error){
+                                        console.log(error);
+                                    });
+                                }
+                            } else {
+                                next();
+                            }
+                        }).catch(function(error){
+
+                        });
                     } else {
                         next(); // 404
                     }
@@ -200,33 +227,47 @@ router.get('/:page', function(req, res, next){
                     }
                 }).then(function(nse){
                     if(nse){
-                        if(nse.type.localeCompare("CONTENT") == 0){
-                            models.PageContent.findAll({
-                                where: { NavigationSubElementId: nse.id }
-                            }).then(function(pcs){
-                                res.render("pages/commune", {
-                                    structure: results,
-                                    type: "CONTENT",
-                                    content: pcs
-                                });
-                            }).catch(function(error){
-                                console.log(error);
-                            });
-                        } else if(nse.type.localeCompare("LINK") == 0){
-                            next();
-                        } else if(nse.type.localeCompare("LIST") == 0){
-                            models.PageListElement.findAll({
-                                where: { NavigationSubElementId: nse.id }
-                            }).then(function(ples){
-                                res.render("pages/commune", {
-                                    structure: results,
-                                    type: "LIST",
-                                    list: ples
-                                })
-                            }).catch(function(error){
-                                console.log(error);
-                            });
-                        }
+                        models.SlideElement.findOne({
+                            where: {
+                                name: "Slideshow"
+                            }
+                        }).then(function(slideshow){
+                            if(slideshow){
+                                if(nse.type.localeCompare("CONTENT") == 0){
+                                    models.PageContent.findAll({
+                                        where: { NavigationSubElementId: nse.id }
+                                    }).then(function(pcs){
+                                        res.render("pages/commune", {
+                                            structure: results,
+                                            type: "CONTENT",
+                                            content: pcs,
+                                            slideshow: slideshow.content
+                                        });
+                                    }).catch(function(error){
+                                        console.log(error);
+                                    });
+                                } else if(nse.type.localeCompare("LINK") == 0){
+                                    next();
+                                } else if(nse.type.localeCompare("LIST") == 0){
+                                    models.PageListElement.findAll({
+                                        where: { NavigationSubElementId: nse.id }
+                                    }).then(function(ples){
+                                        res.render("pages/commune", {
+                                            structure: results,
+                                            type: "LIST",
+                                            list: ples,
+                                            slideshow: slideshow.content
+                                        })
+                                    }).catch(function(error){
+                                        console.log(error);
+                                    });
+                                }
+                            } else {
+                                next();
+                            }
+                        }).catch(function(error){
+
+                        });
                     } else {
                         next(); // 404
                     }
@@ -245,7 +286,7 @@ router.get('/:page', function(req, res, next){
 });
 
 router.get('/', function(req, res, next){
-   res.redirect("/accueil")
+    res.redirect("/accueil")
 });
 
 module.exports = router;

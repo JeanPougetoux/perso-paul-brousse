@@ -3,17 +3,22 @@
     src: url('timess.ttf');
 }
 
+body{
+    min-height: 100%;
+}
+
 hr{
     border-top: 1px solid #d20012;
     margin: 0.1em 0;
 }
 
-#hr-zone-top{
+.hr-zone-top{
     margin-bottom: 4%;
 }
 
-#hr-zone-bottom{
+.hr-zone-bottom{
     margin-top: 4%;
+    margin-bottom: 5%;
 }
 
 #hide-zone{
@@ -195,4 +200,44 @@ i.red-icon{
 
 a:hover {
  cursor:pointer;
+}
+
+#zone-1{
+   text-align: justify; 
+}
+
+#zone-2 .subzone-1{
+    text-align: justify;
+    width: 50%;
+    float: left;
+    padding-right: 3%;
+}
+
+#zone-3 .subzone-1{
+    text-align: justify;
+    width: 50%;
+    float: left;
+    padding-right: 3%;
+}
+
+#zone-4 .subzone-1{
+    text-align: justify;
+    width: 50%;
+    float: left;
+    padding-right: 3%;
+}
+
+.subzone-2{
+    padding-left: 51%;
+    text-align: justify;
+}
+
+.subzone-3{
+    padding-left: 51%;
+    text-align: justify;
+}
+
+.subzone-4{
+    padding-left: 51%;
+    text-align: justify;
 }

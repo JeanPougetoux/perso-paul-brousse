@@ -9,6 +9,55 @@ var sequelize = require('sequelize');
 var op = sequelize.Op;
 
 
+router.get('/slideshow', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    models.SlideElement.findOne({
+        where: {
+            name: "Slideshow"
+        }
+    }).then(function(slideshow){
+        if(slideshow){
+            return res.status(200).json({'success': slideshow.content}); 
+        } else {
+            return res.status(404).json({'error': "Le slideshow est introuvable dans la base de données"});
+        }
+    }).catch(function(error){
+
+    });
+});
+
+router.post('/slideshow', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+    
+    if(req.body.content == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+
+    models.SlideElement.findOne({
+        where: {
+            name: "Slideshow"
+        }
+    }).then(function(slideshow){
+        if(!slideshow){
+            return res.status(404).json({'error': "Le slideshow est introuvable dans la base de données"});
+        } else {
+            slideshow.content = req.body.content;
+            slideshow.save().then(function(){
+                return res.status(200).json({'success': "Le contenu du slideshow a bien été modifié"});
+            }).catch(function(error){
+                
+            });
+        }
+    }).catch(function(error){
+
+    });
+});
+
 router.get('/connexion', function(req, res, next) {
     if(req.session.connected){ 
         res.redirect("/admin/gestion");
@@ -710,7 +759,7 @@ router.post('/gestion/articles/add', function(req, res, next){
     if(req.body.title == null || req.body.description == null || req.body.illustration == null || req.body.content == null || req.body.type == null || req.body.subnavid == null){
         return res.status(500).json({'error': "Il manque un paramètre"});
     }
-    
+
     models.PageListElement.create({
         title: req.body.title,
         description: req.body.description,
@@ -719,7 +768,7 @@ router.post('/gestion/articles/add', function(req, res, next){
         type: req.body.type,
         NavigationSubElementId: req.body.subnavid
     }).then(function(element){
-       return res.status(200).json({'success': "L'article a bien été créé"}); 
+        return res.status(200).json({'success': "L'article a bien été créé"}); 
     }).catch(function(error){
         console.log(error);
     });
@@ -733,22 +782,22 @@ router.post('/gestion/articles/modify', function(req, res, next){
     if(req.body.id == null || req.body.title == null || req.body.description == null || req.body.illustration == null || req.body.type == null){
         return res.status(500).json({'error': "Il manque un paramètre"});
     }
-    
+
     models.PageListElement.findOne({
         where: {
             id: req.body.id
         }
     }).then(function(element){
-       if(element){
+        if(element){
             element.title = req.body.title,
-            element.description = req.body.description,
-            element.illustration = req.body.illustration,
-            element.type = req.body.type
-           element.save();
-           return res.status(200).json({'success': "L'élément de liste a bien été modifié"});
-       } else {
-           return res.status(404).json({'error': "L'élément de liste n'existe pas"});
-       }
+                element.description = req.body.description,
+                element.illustration = req.body.illustration,
+                element.type = req.body.type
+            element.save();
+            return res.status(200).json({'success': "L'élément de liste a bien été modifié"});
+        } else {
+            return res.status(404).json({'error': "L'élément de liste n'existe pas"});
+        }
     }).catch(function(error){
         console.log(error);
     });
@@ -762,19 +811,19 @@ router.post('/gestion/articles/content/modify', function(req, res, next){
     if(req.body.id == null || req.body.content == null){
         return res.status(500).json({'error': "Il manque un paramètre"});
     }
-    
+
     models.PageListElement.findOne({
         where: {
             id: req.body.id
         }
     }).then(function(element){
-       if(element){
-        element.content = req.body.content
-           element.save();
-           return res.status(200).json({'success': "L'élément de liste a bien été modifié"});
-       } else {
-           return res.status(404).json({'error': "L'élément de liste n'existe pas"});
-       }
+        if(element){
+            element.content = req.body.content
+            element.save();
+            return res.status(200).json({'success': "L'élément de liste a bien été modifié"});
+        } else {
+            return res.status(404).json({'error': "L'élément de liste n'existe pas"});
+        }
     }).catch(function(error){
         console.log(error);
     });

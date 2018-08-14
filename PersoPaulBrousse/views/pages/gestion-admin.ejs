@@ -12,6 +12,27 @@
     <body>
         <h4>Interface d'aministration</h4>
 
+        <div id="modal-slideshow" class="modal">
+            <div class="modal-content">
+                <h4 id="title-modal">Modifier le slideshow</h4>
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="slideshow-content input-field col s12">
+                                <textarea id="content" class="materialize-textarea"></textarea>
+                                <label id="label-content" for="content">Contenu slideshow</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="validate-modal" class="add-article waves-effect waves-green btn-flat">
+                    Sauvegarder
+                </a>
+            </div>
+        </div>
+
         <table class="centered">
             <thead>
                 <tr>
@@ -29,8 +50,8 @@
 
                 <% structure.forEach(function(navelement){ %>
                 <%
-                    var up = (structure.indexOf(navelement) > 0 ? "" : "disabled");
-                    var down = (structure.indexOf(navelement) == structure.length - 1 ? "disabled" : "");
+                var up = (structure.indexOf(navelement) > 0 ? "" : "disabled");
+                var down = (structure.indexOf(navelement) == structure.length - 1 ? "disabled" : "");
                 %>
                 <tr>
                     <td><%= navelement.title %></td>
@@ -63,8 +84,8 @@
 
                 <% navelement.NavigationSubElements.forEach(function(navsubelement){ %>
                 <%
-                    var up = (navelement.NavigationSubElements.indexOf(navsubelement) > 0 ? "" : "disabled");
-                    var down = (navelement.NavigationSubElements.indexOf(navsubelement) == navelement.NavigationSubElements.length- 1 ? "disabled" : "");
+                var up = (navelement.NavigationSubElements.indexOf(navsubelement) > 0 ? "" : "disabled");
+                var down = (navelement.NavigationSubElements.indexOf(navsubelement) == navelement.NavigationSubElements.length- 1 ? "disabled" : "");
                 %>
                 <tr>
                     <td></td>
@@ -132,11 +153,17 @@
 
             </tbody>
         </table>
-        
+
         <div class="fixed-action-btn">
-            <a href="/admin/gestion/documents" class="btn-floating btn-large blue lighten-3">
-                <i class="large material-icons">insert_drive_file</i>
+            <a class="btn-floating btn-large red">
+                <i class="large material-icons">mode_edit</i>
             </a>
+            <ul>
+                <li><a href="/admin/gestion/documents" class="btn-floating blue lighten-3">
+                    <i class="material-icons">insert_drive_file</i></a></li>
+                <li><a id="slideshow-modif" class="btn-floating orange lighten-4">
+                    <i class="material-icons">slideshow</i></a></li>
+            </ul>
         </div>
 
         <script type="text/javascript" src="/javascripts/jquery.js"></script>

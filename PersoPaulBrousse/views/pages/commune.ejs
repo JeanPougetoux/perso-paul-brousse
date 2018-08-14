@@ -1,7 +1,7 @@
 <html>
     <head>
         <title>
-            
+
         </title>
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
@@ -32,28 +32,10 @@
             </div>
         </div>  
         <div id="hide-zone"></div>
-        <img id="logo" src="/images/log.png" onerror="this.src='/images/defaut.jpg'">
+        <img id="logo" src="/images/logo.png" onerror="this.src='/images/defaut.jpg'">
 
         <div id="slideshow">
-            <div class="slideshow-container">
-                <div class="mySlides fade">
-                    <img src="/images/cgt.png" onerror="this.src='/images/defaut.jpg'">
-                </div>
-
-                <div class="mySlides fade">
-                    <img src="/images/cgt.png" onerror="this.src='/images/defaut.jpg'">
-                </div>
-
-                <div class="mySlides fade">
-                    <img src="/images/cgt.png" onerror="this.src='/images/defaut.jpg'">
-                </div>
-            </div>
-
-            <div style="text-align:center;">
-                <span class="dot" onclick="currentSlide(1)"></span> 
-                <span class="dot" onclick="currentSlide(2)"></span> 
-                <span class="dot" onclick="currentSlide(3)"></span> 
-            </div>
+            <%- slideshow %>
         </div>
 
         <ul id="slide-out" class="sidenav sidenav-fixed">
@@ -114,16 +96,132 @@
             <i class="tiny material-icons red-icon">local_phone
             </i> 01.45.59.32.71<br>
             <i class="tiny material-icons red-icon"> mail
-            </i> 
+            </i> paul-brousse.cgt@pbr.aphp.fr
         </div>
 
         <div id="main">
-            <div id="hr-zone-top">
-                <hr>
-                <hr>
-            </div>
             <% if(type.localeCompare("CONTENT") == 0){ %>
-            <%- content[0].content %>
+            <% if(content.length == 1){ %>
+            <div id="zone-1">
+                <div class="hr-zone-top">
+                    <hr>
+                    <hr>
+                </div>
+                <%- content[0].content %>
+                <div class="hr-zone-bottom">
+                    <hr>
+                    <hr>
+                </div>
+            </div>
+            <% } else if(content.length == 2) { %>
+            <div id="zone-2">
+                <div class="subzone-1">
+                    <div class="hr-zone-top">
+                        <hr>
+                        <hr>
+                    </div>
+                    <%- content[0].content %>
+                    <div class="hr-zone-bottom">
+                        <hr>
+                        <hr>
+                    </div>
+                </div>
+                <div class="subzone-2">
+                    <div class="hr-zone-top">
+                        <hr>
+                        <hr>
+                    </div>
+                    <%- content[1].content %>
+                    <div class="hr-zone-bottom">
+                        <hr>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <% } else if(content.length == 3) { %>
+            <div id="zone-3">
+                <div class="subzone-1">
+                    <div class="hr-zone-top">
+                        <hr>
+                        <hr>
+                    </div>
+                    <%- content[0].content %>
+                    <div class="hr-zone-bottom">
+                        <hr>
+                        <hr>
+                    </div>
+                </div>
+                <div class="subzone-2">
+                    <div class="hr-zone-top">
+                        <hr>
+                        <hr>
+                    </div>
+                    <%- content[1].content %>
+                    <div class="hr-zone-bottom">
+                        <hr>
+                        <hr>
+                    </div>
+                </div>
+                <div class="subzone-3">
+                    <div class="hr-zone-top">
+                        <hr>
+                        <hr>
+                    </div>
+                    <%- content[2].content %>
+                    <div class="hr-zone-bottom">
+                        <hr>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <% } else if(content.length == 4) { %>
+            <div id="zone-4">
+                <div class="subzone-1">
+                    <div class="hr-zone-top">
+                        <hr>
+                        <hr>
+                    </div>
+                    <%- content[0].content %>
+                    <div class="hr-zone-bottom">
+                        <hr>
+                        <hr>
+                    </div>
+                </div>
+                <div class="subzone-2">
+                    <div class="hr-zone-top">
+                        <hr>
+                        <hr>
+                    </div>
+                    <%- content[1].content %>
+                    <div class="hr-zone-bottom">
+                        <hr>
+                        <hr>
+                    </div>
+                </div>
+                <div class="subzone-3">
+                    <div class="hr-zone-top">
+                        <hr>
+                        <hr>
+                    </div>
+                    <%- content[2].content %>
+                    <div class="hr-zone-bottom">
+                        <hr>
+                        <hr>
+                    </div>
+                </div>
+                <div class="subzone-4">
+                    <div class="hr-zone-top">
+                        <hr>
+                        <hr>
+                    </div>
+                    <%- content[3].content %>
+                    <div class="hr-zone-bottom">
+                        <hr>
+                        <hr>
+                    </div>
+                </div>
+            </div>
+            <% } %>
             <% } else if (type.localeCompare("LIST") == 0){ 
                 list.forEach(function(element){ %>
             <ul class="collection">
@@ -136,12 +234,8 @@
             </ul>
             <% }); %>
             <% } else if (type.localeCompare("ARTICLE") == 0){ %>
-                <%- content %>
+            <%- content %>
             <% } %>
-            <div id="hr-zone-bottom">
-                <hr>
-                <hr>
-            </div>
         </div>
 
         <script type="text/javascript" src="/javascripts/jquery.js"></script>

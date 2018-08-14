@@ -630,4 +630,39 @@ $(document).ready(function(){
             }
         });
     });
+    
+    $("#slideshow-modif").click(function(){
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: "/admin/slideshow",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                $("#content").val(msg.success);
+                $("#label-content").addClass("active");
+                M.Modal.getInstance($("#modal-slideshow")).open();
+            }
+        });
+    });
+    
+    $("#validate-modal").click(function(){
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'content': $("#content").val(),
+            },
+            url: "/admin/slideshow",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                swal("Félicitation", msg.success, "success").then(function(){
+                    location.reload();  
+                });
+            }
+        });
+    });
 });

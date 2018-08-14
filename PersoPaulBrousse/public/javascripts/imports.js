@@ -4,4 +4,5 @@ $(document).ready(function(){
     $('.fixed-action-btn').floatingActionButton();
     $('.modal').modal();
     $('select').formSelect();
+    $('.fixed-action-btn').floatingActionButton();
 });
