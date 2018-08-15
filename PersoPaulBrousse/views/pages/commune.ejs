@@ -84,8 +84,8 @@
             </li>
             <% } %>
             <% }); %>
-            <li><a>Newsletter</a></li>
-            <li><a>Adhérer</a></li>
+            <li><a>newsletter</a></li>
+            <li><a>adhérer</a></li>
             <li><a class="waves-effect waves-light btn modal-trigger" href="#modal-newsletter">Modal</a></li>
         </ul>
 
@@ -223,8 +223,19 @@
             </div>
             <% } %>
             <% } else if (type.localeCompare("LIST") == 0){ 
-                list.forEach(function(element){ %>
-            <ul class="collection">
+                var liIndex = -1;
+                var pageIndex = 1;
+                var displayClass = "";
+                %>
+            <%- header %>
+            <% list.forEach(function(element){ 
+                liIndex++;
+                if(liIndex > 4){
+                    displayClass = "no-display";
+                    pageIndex++;
+                    liIndex = 0;
+                } %>
+            <ul class="<%= displayClass %> collection page-<%= pageIndex %>">
                 <li class="collection-item avatar special-avat">
                     <img src="/public/images/<%= element.illustration %>" onerror="this.src='/images/defaut.jpg'"  class="circle">
                     <span class="title"><%= element.title %></span>
@@ -233,6 +244,19 @@
                 </li>
             </ul>
             <% }); %>
+            <br>
+            <ul class="pagination center-align">
+                <li class="disabled"><a class="left-c"><i class="material-icons">chevron_left</i></a></li>
+                <li class="active"><a id="li-p-1" class="page">1</a></li>
+                <%
+                var pas;
+                
+                for (pas = 1; pas < pageIndex; pas++) { %>
+                <li class="waves-effect"><a id="li-p-<%= pas + 1 %>" class="page <%= pas == pageIndex - 1 ? "lastC" : ""%>"><%= pas + 1 %></a></li>
+                <% } %>
+                
+                <li class="waves-effect <%= pageIndex == 1 ? "disabled" : "" %>"><a class="right-c"><i class="material-icons">chevron_right</i></a></li>
+            </ul>
             <% } else if (type.localeCompare("ARTICLE") == 0){ %>
             <%- content %>
             <% } %>

@@ -58,56 +58,85 @@
                 <% }); %>
             </tbody>
         </table>
-        
-        
+
+
         <div class="fixed-action-btn">
-            <a id="trigger-modal-articles" class="btn-floating btn-large blue lighten-3">
-                <input type="hidden" value="" />
-                <i class="large material-icons">add</i>
+            <a class="btn-floating btn-large red">
+                <i class="large material-icons">mode_edit</i>
             </a>
+            <ul>
+                <li><a id="trigger-modal-header" class="btn-floating purple lighten-4">
+                    <i class="material-icons">view_headline</i><input type="hidden" value="<%= idpage %>" /></a></li>
+                <li><a id="trigger-modal-articles" class="btn-floating blue lighten-3">
+                    <input type="hidden" value="" />
+                    <i class="large material-icons">add</i>
+                    </a></li>
+            </ul>
         </div>
-        
-        <div id="modal-articles" class="modal">
+
+        <div id="modal-header" class="modal">
             <div class="modal-content">
-              <h4 id="title-modal"></h4>
+                <h4 id="title-modal-header">Modifier le header</h4>
                 <div class="row">
                     <form class="col s12">
                         <div class="row">
-                            <div class="element add-element modify-element input-field col s12">
-                              <input id="title" type="text">
-                              <label id="label-title" for="title">Titre</label>
-                            </div>
-                            <div class="element add-element modify-element input-field col s12">
-                              <textarea id="description" class="materialize-textarea"></textarea>
-                              <label id="label-description" for="description">Description/premières lignes</label>
-                            </div>
-                            <div class="element add-element modify-element input-field col s12">
-                              <input id="illustration" type="text">
-                              <label id="label-illustration" for="illustration">Nom illustration</label>
-                            </div>
-                            <div class="element add-element modify-element input-field col s12">
-                                <select id="type">
-                                  <option value="CONTENT" selected>Contenu</option>
-                                  <option value="LINK">Fichier</option>
-                                </select>
-                                <label>Type</label>
-                              </div>
-                            <div class="element add-element modify-content-element input-field col s12">
-                              <textarea id="content" class="materialize-textarea"></textarea>
-                              <label id="label-content" for="content">Contenu/nom pdf</label>
+                            <div class="header-content input-field col s12">
+                                <textarea id="header-content" class="materialize-textarea"></textarea>
+                                <label id="label-header-content" for="header-content">Contenu header</label>
                             </div>
                         </div>
                     </form>
                 </div>
             </div>
             <div class="modal-footer">
-              <a id="validate-modal" class="add-article waves-effect waves-green btn-flat">
+                <a id="validate-header-modal" class="waves-effect waves-green btn-flat">
+                    <input type="hidden" value="<%= idpage %>" />
+                    Sauvegarder
+                </a>
+            </div>
+        </div>
+
+        <div id="modal-articles" class="modal">
+            <div class="modal-content">
+                <h4 id="title-modal"></h4>
+                <div class="row">
+                    <form class="col s12">
+                        <div class="row">
+                            <div class="element add-element modify-element input-field col s12">
+                                <input id="title" type="text">
+                                <label id="label-title" for="title">Titre</label>
+                            </div>
+                            <div class="element add-element modify-element input-field col s12">
+                                <textarea id="description" class="materialize-textarea"></textarea>
+                                <label id="label-description" for="description">Description/premières lignes</label>
+                            </div>
+                            <div class="element add-element modify-element input-field col s12">
+                                <input id="illustration" type="text">
+                                <label id="label-illustration" for="illustration">Nom illustration</label>
+                            </div>
+                            <div class="element add-element modify-element input-field col s12">
+                                <select id="type">
+                                    <option value="CONTENT" selected>Contenu</option>
+                                    <option value="LINK">Fichier</option>
+                                </select>
+                                <label>Type</label>
+                            </div>
+                            <div class="element add-element modify-content-element input-field col s12">
+                                <textarea id="content" class="materialize-textarea"></textarea>
+                                <label id="label-content" for="content">Contenu/nom pdf</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a id="validate-modal" class="add-article waves-effect waves-green btn-flat">
                     Valider
                     <input type="hidden" class="idpage" value="<%= idpage %>" />
                     <input type="hidden" class="idarticle" />
                 </a>
             </div>
-          </div>
+        </div>
 
         <script type="text/javascript" src="/javascripts/jquery.js"></script>
         <script type="text/javascript" src="/javascripts/materialize.min.js"></script>

@@ -642,12 +642,13 @@ $(document).ready(function(){
             success: function (msg) {
                 $("#content").val(msg.success);
                 $("#label-content").addClass("active");
+                M.textareaAutoResize(document.querySelector('#content'))
                 M.Modal.getInstance($("#modal-slideshow")).open();
             }
         });
     });
     
-    $("#validate-modal").click(function(){
+    $("#validate-modal-slideshow").click(function(){
         $.ajax({
             type: 'POST',
             dataType: 'json',
@@ -655,6 +656,42 @@ $(document).ready(function(){
                 'content': $("#content").val(),
             },
             url: "/admin/slideshow",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                swal("Félicitation", msg.success, "success").then(function(){
+                    location.reload();  
+                });
+            }
+        });
+    });
+    
+    $("#trigger-modal-header").click(function(){
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: "/admin/gestion/list/" + $(this).find("input").val() + "/header",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                $("#header-content").val(msg.success);
+                $("#label-header-content").addClass("active");
+                M.textareaAutoResize(document.querySelector('#header-content'))
+                M.Modal.getInstance($("#modal-header")).open();
+            }
+        });
+    });
+    
+    $("#validate-header-modal").click(function(){
+        $.ajax({
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'content': $("#header-content").val(),
+            },
+            url: "/admin/gestion/list/" + $(this).find("input").val() + "/header",
             error: function (jqXHR, textStatus, errorThrown) {
                 swal("Erreur", jqXHR.responseJSON.error, "error");
             },

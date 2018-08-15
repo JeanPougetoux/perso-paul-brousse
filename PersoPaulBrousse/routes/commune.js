@@ -161,12 +161,23 @@ router.get('/:page/:subpage', function(req, res, next){
                                         where: { NavigationSubElementId: nse.id },
                                         attributes: ["id", "illustration", "title", "description", "type"]
                                     }).then(function(ples){
-                                        res.render("pages/commune", {
-                                            structure: results,
-                                            type: "LIST",
-                                            list: ples,
-                                            slideshow: slideshow.content
-                                        })
+                                        models.PageContent.findOne({
+                                            where: { NavigationSubElementId: nse.id }
+                                        }).then(function(pc){
+                                            if(pc){
+                                                res.render("pages/commune", {
+                                                    structure: results,
+                                                    type: "LIST",
+                                                    list: ples,
+                                                    header: pc.content,
+                                                    slideshow: slideshow.content
+                                                });
+                                            } else {
+                                                next();
+                                            }
+                                        }).catch(function(error){
+
+                                        });
                                     }).catch(function(error){
                                         console.log(error);
                                     });
@@ -252,12 +263,23 @@ router.get('/:page', function(req, res, next){
                                     models.PageListElement.findAll({
                                         where: { NavigationSubElementId: nse.id }
                                     }).then(function(ples){
-                                        res.render("pages/commune", {
-                                            structure: results,
-                                            type: "LIST",
-                                            list: ples,
-                                            slideshow: slideshow.content
-                                        })
+                                        models.PageContent.findOne({
+                                            where: { NavigationSubElementId: nse.id }
+                                        }).then(function(pc){
+                                            if(pc){
+                                                res.render("pages/commune", {
+                                                    structure: results,
+                                                    type: "LIST",
+                                                    list: ples,
+                                                    header: pc.content,
+                                                    slideshow: slideshow.content
+                                                });
+                                            } else {
+                                                next();
+                                            }
+                                        }).catch(function(error){
+
+                                        });
                                     }).catch(function(error){
                                         console.log(error);
                                     });

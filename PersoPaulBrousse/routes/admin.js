@@ -33,7 +33,7 @@ router.post('/slideshow', function(req, res, next){
     if(!req.session.connected){
         return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
     }
-    
+
     if(req.body.content == null){
         return res.status(500).json({'error': "Il manque un paramètre"});
     }
@@ -50,11 +50,86 @@ router.post('/slideshow', function(req, res, next){
             slideshow.save().then(function(){
                 return res.status(200).json({'success': "Le contenu du slideshow a bien été modifié"});
             }).catch(function(error){
-                
+
             });
         }
     }).catch(function(error){
 
+    });
+});
+
+router.get('/gestion/list/:id/header', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    models.NavigationSubElement.findOne({
+        where: {
+            id: req.params.id,
+            type: "LIST"
+        }
+    }).then(function(list){
+        if(list){
+            models.PageContent.findOne({
+                where: {
+                    NavigationSubElementId: list.id
+                }
+            }).then(function(pagecontent){
+                if(pagecontent){
+                    return res.status(200).json({'success': pagecontent.content});
+                } else {
+                    return res.status(404).json({'error': "Le header pour cette liste pas n'existe pas"});
+                }
+            }).catch(function(error){
+
+            });
+        } else {
+            return res.status(404).json({'error': "La liste n'existe pas"});
+        }
+    }).catch(function(error){
+
+    });
+});
+
+router.post('/gestion/list/:id/header', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.content == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+
+    models.NavigationSubElement.findOne({
+        where: {
+            id: req.params.id,
+            type: "LIST"
+        }
+    }).then(function(list){
+        if(list){
+            models.PageContent.findOne({
+                where: {
+                    NavigationSubElementId: list.id
+                }
+            }).then(function(pagecontent){
+                if(pagecontent){
+                    pagecontent.content = req.body.content;
+                    pagecontent.save().then(function(){
+                        return res.status(200).json({'success': "Le contenu du header a bien été modifié"});
+                    }).catch(function(error){
+                        return res.status(500).json({'error': "Une erreur s'est produite : " + error});
+                    });
+                } else {
+                    return res.status(404).json({'error': "Le header pour cette liste pas n'existe pas"});
+                }
+            }).catch(function(error){
+                return res.status(500).json({'error': "Une erreur s'est produite : " + error});
+            });
+        } else {
+            return res.status(404).json({'error': "La liste n'existe pas"});
+        }
+    }).catch(function(error){
+        return res.status(500).json({'error': "Une erreur s'est produite : " + error});
     });
 });
 
@@ -326,6 +401,17 @@ router.post('/gestion/navsubelement/add', function(req, res, next){
                     link: "",
                     NavigationSubElementId: navsubelement.id
                 }).then(function(pagelink){
+                    return res.status(200).json({'success': "L'élément de sous-navigation a bien été ajouté !"});
+                }).catch(function(error){
+
+                });
+            } 
+            else if(req.body.type.localeCompare("LIST") == 0){
+                models.PageContent.create({
+                    content: "",
+                    order: 1,
+                    NavigationSubElementId: navsubelement.id
+                }).then(function(pagecontent){
                     return res.status(200).json({'success': "L'élément de sous-navigation a bien été ajouté !"});
                 }).catch(function(error){
 
