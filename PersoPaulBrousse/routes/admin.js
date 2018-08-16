@@ -144,19 +144,23 @@ router.get('/connexion', function(req, res, next) {
 });
 
 router.get('/gestion/documents', function(req, res, next){
-    if(!req.session.connected){
-        res.redirect("/admin/connexion");
-    } else {
-        var arr = [];
+    try{
+        if(!req.session.connected){
+            res.redirect("/admin/connexion");
+        } else {
+            var arr = [];
 
-        fs.readdirSync("./public/images").forEach(file => {
-            arr.push(file);
-        });
+            fs.readdirSync("./public/images").forEach(file => {
+                arr.push(file);
+            });
 
-        res.render("pages/gestion-document-admin", {
-            files: arr
-        });
-    };
+            res.render("pages/gestion-document-admin", {
+                files: arr
+            });
+        };
+    } catch (error){
+        console.log(error);
+    }
 });
 
 router.get('/gestion/:id', function(req, res, next){
