@@ -1,6 +1,6 @@
 @font-face {
     font-family: 'timess';
-    src: url('timess.ttf');
+    src: url('/public/images/timess.ttf');
 }
 
 hr{
@@ -73,7 +73,7 @@ img{
     transition: background-color 0.6s ease;
 }
 
-.active, .dot:hover {
+.dot.active, .dot:hover {
     background-color: #717171;
 }
 
@@ -100,6 +100,7 @@ img{
     margin-right: 5%;
     font-size: 19px !important;
     z-index: -1 !important;
+    font-family: "timess", Times, serif;
 }
 
 .collection{
@@ -205,11 +206,11 @@ i.red-icon{
 }
 
 a:hover {
- cursor:pointer;
+    cursor:pointer;
 }
 
 #zone-1{
-   text-align: justify; 
+    text-align: justify; 
 }
 
 #zone-2 .subzone-1{
@@ -254,4 +255,22 @@ a:hover {
 
 .pagination li.active{
     background-color: #d20012 !important;
+}
+
+#label-mail.active{
+    color: black !important;
+}
+
+input:focus{
+    border-bottom: 0.5px solid black!important;
+    box-shadow: 0 0 0 0 black!important;
+}
+
+#subscribe-button{
+    background-color: #d20012 !important;
+}
+
+#text-news{
+    text-align: justify;
+    font-family: "timess", Times, serif !important;
 }
