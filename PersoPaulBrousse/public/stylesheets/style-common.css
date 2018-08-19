@@ -274,3 +274,7 @@ input:focus{
     text-align: justify;
     font-family: "timess", Times, serif !important;
 }
+
+.branding{
+    display: none !important;
+}
