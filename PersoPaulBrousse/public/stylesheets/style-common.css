@@ -278,3 +278,7 @@ input:focus{
 .branding{
     display: none !important;
 }
+
+.show-branding #branding{
+    display: none !important;
+}
