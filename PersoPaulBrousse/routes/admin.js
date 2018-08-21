@@ -163,6 +163,20 @@ router.get('/gestion/documents', function(req, res, next){
     }
 });
 
+router.get('/gestion/adhesions', function(req, res, next){
+    if(!req.session.connected){
+        res.redirect("/admin/connexion");
+    } else {
+        models.Adhesions.findAll().then(function(adhesions){
+            res.render("pages/gestion-adhesions-admin", {
+                adhesions: adhesions 
+            });
+        }).catch(function(error){
+
+        });
+    }
+});
+
 router.get('/gestion/:id', function(req, res, next){
     if(!req.session.connected){
         res.redirect("/admin/connexion");
@@ -231,8 +245,17 @@ router.get('/gestion', function(req, res, next){
                 }
             ]
         }).then(function(results){
-            res.render("pages/gestion-admin", {
-                structure: results 
+            models.Visits.findOne({
+                where:{
+                    name: "VisitsCounter"
+                }
+            }).then(function(counter){
+                res.render("pages/gestion-admin", {
+                    structure: results,
+                    visits: counter
+                });
+            }).catch(function(error){
+
             });
         }).catch(function(error){
 
@@ -917,6 +940,34 @@ router.post('/gestion/articles/content/modify', function(req, res, next){
     }).catch(function(error){
         console.log(error);
     });
+});
+
+router.post('/gestion/adhesion/delete', function(req, res, next){
+    if(!req.session.connected){
+        return res.status(500).json({'error': "Vous n'êtes pas connecté !"});
+    }
+
+    if(req.body.id == null){
+        return res.status(500).json({'error': "Il manque un paramètre"});
+    }
+
+    models.Adhesions.findOne({
+        where: {
+            id: req.body.id
+        }
+    }).then(function(adhesion){
+        if(adhesion){
+            adhesion.destroy({force: true}).then(function(){
+                return res.status(200).json({'success': "La demande d'adhésion a bien été supprimée"}); 
+            }).catch(function(error){
+                return res.status(500).json({'error': "Une erreur est survenue !"});
+            });
+        } else {
+            return res.status(404).json({'error': "La demande d'adhésion n'existe pas"});
+        }
+    }).catch(function(error){
+        return res.status(500).json({'error': "Une erreur est survenue !"});
+    })
 });
 
 module.exports = router;

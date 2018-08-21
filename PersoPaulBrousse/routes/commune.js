@@ -2,6 +2,23 @@ var express = require('express');
 var models = require('../models');
 var router = express.Router();
 
+router.post('/adhere', function(req, res, next){
+    if(req.body.firstname == "" || req.body.lastname == "" || req.body.service == "" || req.body.email == "" || req.body.phone == ""){
+        return res.status(500).json({'error': "Une ou plusieurs informations sont manquantes !"});
+    } 
+    models.Adhesions.create({
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        service: req.body.service,
+        email: req.body.email,
+        telephone: req.body.phone
+    }).then(function(adhesion){
+        return res.status(200).json({'success': "Votre demande d'adhésion a bien été reçue !"});
+    }).catch(function(error){
+        return res.status(500).json({'error': "Une erreur est survenue !"});
+    })
+});
+
 router.get('/article/:idArticle', function(req, res, next){
     models.PageListElement.findOne({
         where: { id: req.params.idArticle }

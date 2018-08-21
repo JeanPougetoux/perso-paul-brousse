@@ -1,0 +1,93 @@
+<html>
+    <head>
+        <title>
+
+        </title>
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+        <link rel="stylesheet" type="text/css" href="/stylesheets/style-common.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-rc.2/css/materialize.min.css">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/brands.css" integrity="sha384-nT8r1Kzllf71iZl81CdFzObMsaLOhqBU1JD2+XoAALbdtWaXDOlWOZTR4v1ktjPE" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/fontawesome.css" integrity="sha384-HbmWTHay9psM8qyzEKPc8odH4DsOuzdejtnr+OFtDmOcIVnhgReQ4GZBH7uwcjf6" crossorigin="anonymous">
+    </head>
+    <body>
+        <% include ../partials/adhesion %>  
+        <div id="hide-zone"></div>
+        <img id="logo" src="/images/logo.png" onerror="this.src='/images/defaut.jpg'">
+
+        <div id="slideshow">
+            <%- slideshow %>
+        </div>
+
+        <ul id="slide-out" class="sidenav sidenav-fixed">
+            <div id="search-bar">
+                <form id="searchthis" action="/search" style="display:inline;" method="get">
+                    <input id="namanyay-search-box" class="browser-default" name="q" size="40" type="text" placeholder="Rechercher"/>
+                    <input id="namanyay-search-btn" class="browser-default" value="Go" type="submit"/>
+                </form>
+            </div>
+
+
+            <div id="social">
+                <a href="https://www.facebook.com/Cgt-Paul-Brousse-1402818630035962/" target="_blank" class="fab fa-facebook fa-3x"></a>
+                <a href="#" class="fab fa-twitter-square fa-3x"></a>
+                <a href="#" class="fab fa-youtube-square fa-3x"></a>
+            </div>
+
+            <% structure.forEach(function(navelement){
+                if(navelement.NavigationSubElements.length == 0){
+                    return;
+                } 
+                else if (navelement.NavigationSubElements.length == 1 && navelement.NavigationSubElements[0].title == navelement.title){ 
+                    if(navelement.NavigationSubElements[0].type == "LINK"){ %>
+            <li><a href='<%= "/public/images/" + navelement.NavigationSubElements[0].PageLink.link; %>' download="<%= navelement.NavigationSubElements[0].PageLink.link %>"><%= navelement.NavigationSubElements[0].title %></a></li>
+            <% } else { %> 
+            <li><a href="/<%= navelement.title %>/"><%= navelement.title %></a></li>
+            <% } %>
+            <% } else { %>
+            <li class="no-padding">
+                <ul class="collapsible collapsible-accordion">
+                    <li>
+                        <a class="collapsible-header"><%= navelement.title %> <i class="material-icons">arrow_drop_down</i></a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <% navelement.NavigationSubElements.forEach(function(navsubelement){ %>
+                                <% if(navsubelement.type == "LINK"){ %>
+                                <li><a href='<%= "/public/images/" + navsubelement.PageLink.link; %>' download="<%= navsubelement.PageLink.link %>"><%= navsubelement.title %></a></li>
+                                <% } else { %> 
+                                <li><a href="/<%= navelement.title %>/<%= navsubelement.title %>/"><%= navsubelement.title %></a></li>
+                                <% } %>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+            <% } %>
+            <% }); %>
+            <li><a href="#modal-adhesion" class="modal-trigger">adhérer</a></li>
+        </ul>
+
+        <div id="contact-informations">
+            <i class="tiny material-icons red-icon">location_on
+            </i> 12 avenue Paul Vaillant-Couturier<br>
+            <span id="city">94800 VILLEJUIF, <span id="bat">Bât. JJ ROUSSEAU</span></span><br>
+            <i class="tiny material-icons red-icon">local_phone
+            </i> 01.45.59.32.71<br>
+            <i class="tiny material-icons red-icon"> mail
+            </i> paul-brousse.cgt@pbr.aphp.fr
+        </div>
+
+        <div id="main">
+             <h4>La page demandée n'existe pas !</h4>
+        </div>
+
+        <script type="text/javascript" src="/javascripts/jquery.js"></script>
+        <script type="text/javascript" src="/javascripts/materialize.min.js"></script>
+        <script type="text/javascript" src="/javascripts/sweetalert.js"></script>
+        <script type="text/javascript" src="/javascripts/imports.js"></script>
+        <script type="text/javascript" src="/javascripts/carousel.js"></script>
+        <script type="text/javascript" src="/javascripts/user-actions.js"></script>
+
+    </body>
+</html>

@@ -702,4 +702,40 @@ $(document).ready(function(){
             }
         });
     });
+    
+    $(".delete-adhesion").click(function(){
+        swal({
+            title: "Etes-vous sûr ?",
+            text: "Voulez-vous vraiment supprimer la demande d'adhésion ?",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        }).then((willDelete) => {
+            if(!willDelete){
+                return;
+            }
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    'id': $(this).find("input").val()
+                },
+                url: "/admin/gestion/adhesion/delete",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    swal("Erreur", jqXHR.responseJSON.error, "error");
+                },
+                success: function (msg) {
+                    swal("Félicitation", msg.success, "success").then(function(){
+                        location.reload();  
+                    });
+                }
+            });
+        }).catch(err => {
+            if (err) {
+                swal("Erreur", "Une erreur est arrivée !", "error");
+            } else {
+                swal.close();
+            }
+        });
+    });
 });

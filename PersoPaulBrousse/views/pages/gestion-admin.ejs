@@ -2,14 +2,13 @@
 <html>
     <head>
         <title>admin page</title>
-        <link rel='stylesheet' href='/stylesheets/style.css' />
-
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
         <link type="text/css" rel="stylesheet" href="/stylesheets/materialize.min.css"  media="screen,projection"/>
 
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     </head>
     <body>
+       <p style="position:absolute; top: 5px; right: 20px;"><b>Nombre de visites : <%= visits.number %></b></p>
         <h4>Interface d'aministration</h4>
 
         <div id="modal-slideshow" class="modal">
@@ -161,6 +160,8 @@
             <ul>
                 <li><a href="/admin/gestion/documents" class="btn-floating blue lighten-3">
                     <i class="material-icons">insert_drive_file</i></a></li>
+                <li><a href="/admin/gestion/adhesions" class="btn-floating teal accent-1">
+                    <i class="material-icons">person</i></a></li>
                 <li><a id="slideshow-modif" class="btn-floating orange lighten-4">
                     <i class="material-icons">slideshow</i></a></li>
             </ul>
