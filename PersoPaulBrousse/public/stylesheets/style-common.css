@@ -31,7 +31,7 @@ hr{
     width: 21%;
     left: 2%;
     top: 1%;
-    z-index: 3;
+    z-index: 3 !important;
 }
 
 #slide-out{
@@ -39,6 +39,7 @@ hr{
     margin-left: 2%;
     height: 77%;
     padding-bottom: 0;
+    z-index: 3 !important;
 }
 
 #slideshow{
@@ -47,7 +48,7 @@ hr{
     left: 27%;
     float: left;
     max-width: 50%;
-    z-index: 3;
+    z-index: 3 !important;
 }
 
 .slideshow-container {
@@ -295,4 +296,20 @@ input:focus{
 
 .collection .collection-item.avatar .title{
     padding-left: 0.5%;
+}
+
+.ui-dialog.ui-corner-all.ui-widget.ui-widget-content.ui-front.ui-draggable.ui-resizable{
+    width: 100% !important;
+    height: 100% !important;
+    z-index: 4 !important;
+}
+
+#pdf{
+    width: 100% !important;
+    height: 100% !important; 
+}
+
+#dialog{
+    width: 100% !important;
+    height: 100% !important;
 }

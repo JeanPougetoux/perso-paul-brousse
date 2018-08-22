@@ -47,7 +47,7 @@ $(document).ready(function(){
             $("#li-p-" + newPage).click();
         }
     });
-    
+
     $(".right-c").click(function(){
         var activePage = $(".pagination").find(".active").find("a");
         if(!activePage.hasClass("lastC")){
@@ -55,27 +55,31 @@ $(document).ready(function(){
             $("#li-p-" + newPage).click();
         }
     });
-    
+
     $("#adhere-button").click(function(){
         $.ajax({
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    'firstname': $("#firstname").val(),
-                    'lastname': $("#lastname").val(),
-                    'service': $("#service").val(),
-                    'email': $("#email").val(),
-                    'phone': $("#phone").val(),
-                },
-                url: "/adhere",
-                error: function (jqXHR, textStatus, errorThrown) {
-                    swal("Erreur", jqXHR.responseJSON.error, "error");
-                },
-                success: function (msg) {
-                    swal("Félicitation", msg.success, "success").then(function(){
-                        location.reload();  
-                    });
-                }
-            });
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                'firstname': $("#firstname").val(),
+                'lastname': $("#lastname").val(),
+                'service': $("#service").val(),
+                'email': $("#email").val(),
+                'phone': $("#phone").val(),
+            },
+            url: "/adhere",
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (msg) {
+                swal("Félicitation", msg.success, "success").then(function(){
+                    location.reload();  
+                });
+            }
+        });
     });
+
+    $('#trigger').click(function(){
+        $("#dialog").dialog();
+    }); 
 });
