@@ -40,7 +40,9 @@
                 } 
                 else if (navelement.NavigationSubElements.length == 1 && navelement.NavigationSubElements[0].title == navelement.title){ 
                     if(navelement.NavigationSubElements[0].type == "LINK"){ %>
-            <li><a href='<%= "/public/images/" + navelement.NavigationSubElements[0].PageLink.link; %>' download="<%= navelement.NavigationSubElements[0].PageLink.link %>"><%= navelement.NavigationSubElements[0].title %></a></li>
+            <li>
+                <a href="#" class="trigger-pdf"><input type="hidden" value="<%= navelement.NavigationSubElements[0].PageLink.link %>"><%= navelement.NavigationSubElements[0].title %></a> 
+            </li>
             <% } else { %> 
             <li><a href="/<%= navelement.title %>/"><%= navelement.title %></a></li>
             <% } %>
@@ -53,7 +55,9 @@
                             <ul>
                                 <% navelement.NavigationSubElements.forEach(function(navsubelement){ %>
                                 <% if(navsubelement.type == "LINK"){ %>
-                                <li><a href='<%= "/public/images/" + navsubelement.PageLink.link; %>' download="<%= navsubelement.PageLink.link %>"><%= navsubelement.title %></a></li>
+                                <li>
+                                    <a href="#" class="trigger-pdf"><input type="hidden" value="<%= navelement.NavigationSubElements[0].PageLink.link %>"><%= navelement.NavigationSubElements[0].title %></a> 
+                                </li>
                                 <% } else { %> 
                                 <li><a href="/<%= navelement.title %>/<%= navsubelement.title %>/"><%= navsubelement.title %></a></li>
                                 <% } %>
@@ -79,7 +83,7 @@
         </div>
 
         <div id="main">
-             <h4>La page demandée n'existe pas !</h4>
+            <h4>La page demandée n'existe pas !</h4>
         </div>
 
         <script type="text/javascript" src="/javascripts/jquery.js"></script>
