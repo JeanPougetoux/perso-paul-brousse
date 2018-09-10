@@ -41,7 +41,9 @@
                 } 
                 else if (navelement.NavigationSubElements.length == 1 && navelement.NavigationSubElements[0].title == navelement.title){ 
                     if(navelement.NavigationSubElements[0].type == "LINK"){ %>
-            <li><a href='<%= "/public/images/" + navelement.NavigationSubElements[0].PageLink.link; %>' download="<%= navelement.NavigationSubElements[0].PageLink.link %>"><%= navelement.NavigationSubElements[0].title %></a></li>
+            <li>
+                <a href="#" class="trigger-pdf"><input type="hidden" value="<%= navelement.NavigationSubElements[0].PageLink.link %>"><%= navelement.NavigationSubElements[0].title %></a> 
+            </li>
             <% } else { %> 
             <li><a href="/<%= navelement.title %>/"><%= navelement.title %></a></li>
             <% } %>
@@ -54,7 +56,9 @@
                             <ul>
                                 <% navelement.NavigationSubElements.forEach(function(navsubelement){ %>
                                 <% if(navsubelement.type == "LINK"){ %>
-                                <li><a href='<%= "/public/images/" + navsubelement.PageLink.link; %>' download="<%= navsubelement.PageLink.link %>"><%= navsubelement.title %></a></li>
+                                <li>
+                                    <a href="#" class="trigger-pdf"><input type="hidden" value="<%= navelement.NavigationSubElements[0].PageLink.link %>"><%= navelement.NavigationSubElements[0].title %></a> 
+                                </li>
                                 <% } else { %> 
                                 <li><a href="/<%= navelement.title %>/<%= navsubelement.title %>/"><%= navsubelement.title %></a></li>
                                 <% } %>
@@ -80,6 +84,11 @@
         </div>
 
         <div id="main">
+            <div id="dialog" style="display:none"> 
+                <div> 
+                    <iframe id="pdf"></iframe> 
+                </div> 
+            </div>
             <% if(type.localeCompare("CONTENT") == 0){ %>
             <% if(content.length == 1){ %>
             <div id="zone-1">
@@ -230,11 +239,11 @@
                 <li class="active"><a id="li-p-1" class="page">1</a></li>
                 <%
                 var pas;
-                
+
                 for (pas = 1; pas < pageIndex; pas++) { %>
                 <li class="waves-effect"><a id="li-p-<%= pas + 1 %>" class="page <%= pas == pageIndex - 1 ? "lastC" : ""%>"><%= pas + 1 %></a></li>
                 <% } %>
-                
+
                 <li class="waves-effect <%= pageIndex == 1 ? "disabled" : "" %>"><a class="right-c"><i class="material-icons">chevron_right</i></a></li>
             </ul>
             <% } else if (type.localeCompare("ARTICLE") == 0){ %>

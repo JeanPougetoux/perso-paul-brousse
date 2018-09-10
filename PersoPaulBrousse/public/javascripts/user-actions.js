@@ -79,7 +79,9 @@ $(document).ready(function(){
         });
     });
 
-    $('#trigger').click(function(){
+    $('.trigger-pdf').click(function(){
+        var pdf = $(this).find("input").val();
+        $("#pdf").attr('src', "/images/" + pdf);
         $("#dialog").dialog();
     }); 
 });
