@@ -57,7 +57,7 @@
                                 <% navelement.NavigationSubElements.forEach(function(navsubelement){ %>
                                 <% if(navsubelement.type == "LINK"){ %>
                                 <li>
-                                    <a href="#" class="trigger-pdf"><input type="hidden" value="<%= navelement.NavigationSubElements[0].PageLink.link %>"><%= navelement.NavigationSubElements[0].title %></a> 
+                                    <a href="#" class="trigger-pdf"><input type="hidden" value="<%= navsubelement.PageLink.link %>"><%= navsubelement.title %></a> 
                                 </li>
                                 <% } else { %> 
                                 <li><a href="/<%= navelement.title %>/<%= navsubelement.title %>/"><%= navsubelement.title %></a></li>
