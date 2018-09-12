@@ -13,8 +13,8 @@ $(document).ready(function(){
                     swal("Erreur", jqXHR.responseJSON.error, "error");
                 },
                 success: function (msg) {
-                    $(this).attr("href", "/public/images/" + msg.success);
-                    $(this).attr("download", msg.success);
+                    $("#pdf").attr('src', "/images/" + msg.success);
+                    $("#dialog").dialog();
                 }
             });
         } else {
