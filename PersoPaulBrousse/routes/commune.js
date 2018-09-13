@@ -85,7 +85,8 @@ router.get('/:page/:subpage/:article', function(req, res, next){
                                             structure: results,
                                             type: "ARTICLE",
                                             content: article.content,
-                                            slideshow: slideshow.content
+                                            slideshow: slideshow.content,
+                                            page: req.params.page
                                         });
                                     } else {
                                         next();
@@ -166,7 +167,8 @@ router.get('/:page/:subpage', function(req, res, next){
                                             structure: results,
                                             type: "CONTENT",
                                             content: pcs,
-                                            slideshow: slideshow.content
+                                            slideshow: slideshow.content,
+                                            page: req.params.page
                                         });
                                     }).catch(function(error){
                                         console.log(error);
@@ -187,7 +189,8 @@ router.get('/:page/:subpage', function(req, res, next){
                                                     type: "LIST",
                                                     list: ples,
                                                     header: pc.content,
-                                                    slideshow: slideshow.content
+                                                    slideshow: slideshow.content,
+                                                    page: req.params.page
                                                 });
                                             } else {
                                                 next();
@@ -269,7 +272,8 @@ router.get('/:page', function(req, res, next){
                                             structure: results,
                                             type: "CONTENT",
                                             content: pcs,
-                                            slideshow: slideshow.content
+                                            slideshow: slideshow.content,
+                                            page: req.params.page
                                         });
                                     }).catch(function(error){
                                         console.log(error);
@@ -289,7 +293,8 @@ router.get('/:page', function(req, res, next){
                                                     type: "LIST",
                                                     list: ples,
                                                     header: pc.content,
-                                                    slideshow: slideshow.content
+                                                    slideshow: slideshow.content,
+                                                    page: req.params.page
                                                 });
                                             } else {
                                                 next();
