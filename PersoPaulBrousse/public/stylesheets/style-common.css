@@ -324,8 +324,10 @@ input:focus{
 
 @media only screen and (max-width: 992px){
     #develop{
-        margin-left: 2%;
-        margin-top: 2%;
+        position: fixed;
+        float: left;
+        left: 2%;
+        top: 1%;
     }
 
     #slide-out{
@@ -338,9 +340,9 @@ input:focus{
 
     #hide-zone{
         top: 0;
-        height: 11vw;
+        height: 53vw;
         min-width: 100%;
-        z-index: -1 !important;
+        z-index: 2 !important;
     }
 
     #logo{
@@ -372,11 +374,11 @@ input:focus{
     }
 
     #main {
-        margin-top: 45vw;
+        margin-top: 55vw;
         margin-left: 5%;
         margin-right: 5%;
         font-size: 5vw !important;
-        z-index: -1 !important;
+        z-index: -2 !important;
         font-family: "timess", Times, serif;
     }
 
@@ -405,5 +407,13 @@ input:focus{
         border-radius: 50%;
         display: inline-block;
         transition: background-color 0.6s ease;
+    }
+    
+    li.collection-item{
+        font-size: 2.5vw;
+    }
+    
+    .collection .collection-item.avatar .title{
+        font-size: 2vw !important;
     }
 }
