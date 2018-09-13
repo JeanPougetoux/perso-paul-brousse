@@ -25,6 +25,7 @@ hr{
     min-width: 100%;
     z-index: 2 !important;
 }
+
 #logo{
     position: fixed;
     float: left;
@@ -97,7 +98,7 @@ img{
 }
 
 #main {
-    margin-top: 13%;
+    margin-top: 7%;
     margin-left: 23%;
     margin-right: 5%;
     font-size: 19px !important;
@@ -313,4 +314,96 @@ input:focus{
 #dialog{
     width: 100% !important;
     height: 100% !important;
+}
+
+.trigger-menu{
+    z-index: 3 !important;
+}
+
+/* MEDIA QUERIES */
+
+@media only screen and (max-width: 992px){
+    #develop{
+        margin-left: 2%;
+        margin-top: 2%;
+    }
+
+    #slide-out{
+        width: 55%;
+        margin-top: 0;
+        margin-left: 0;
+        height: 100%;
+        z-index: 1000 !important;
+    } 
+
+    #hide-zone{
+        top: 0;
+        height: 11vw;
+        min-width: 100%;
+        z-index: -1 !important;
+    }
+
+    #logo{
+        width: 40%;
+        left: 3%;
+        top: 12vw;
+    }
+
+    #contact-informations{
+        top: 12vw;
+        left: 50%;
+        font-size: 3vw;
+        width: 50%;
+        z-index: 3;
+        line-height: 3.5vw;
+    }
+
+    #bat{
+        font-size: 2.5vw;
+    }
+
+    #slideshow{
+        position: fixed;
+        top: 30vw;
+        left: 3%;
+        float: left;
+        max-width: 94%;
+        z-index: 3 !important;
+    }
+
+    #main {
+        margin-top: 45vw;
+        margin-left: 5%;
+        margin-right: 5%;
+        font-size: 5vw !important;
+        z-index: -1 !important;
+        font-family: "timess", Times, serif;
+    }
+
+    #slide-out{
+        font-size: 4vw;
+    }
+
+    #slide-out a{
+        font-size: 3vw !important;
+    }
+    
+    #slide-out a.fab{
+        font-size: 7vw !important;
+    }
+
+    #namanyay-search-box{
+        width: 60% !important;
+    }
+
+    .dot {
+        cursor: pointer;
+        height: 15px;
+        width: 15px;
+        margin: 15 8px;
+        background-color: #bbb;
+        border-radius: 50%;
+        display: inline-block;
+        transition: background-color 0.6s ease;
+    }
 }
