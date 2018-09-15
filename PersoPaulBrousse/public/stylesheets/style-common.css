@@ -3,6 +3,18 @@
     src: url('/public/images/timess.ttf');
 }
 
+.ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close {
+    background: #d20012;
+}
+
+.sidenav li>a>i, .sidenav li>a>[class^="mdi-"], .sidenav li>a li>a>[class*="mdi-"], .sidenav li>a>i.material-icons{
+    margin-right: 0 !important;
+}
+
+#error{
+    margin-top: 20%;
+}
+
 hr{
     border-top: 1px solid #d20012;
     margin: 0.1em 0;
@@ -284,7 +296,22 @@ input:focus{
 
 #adhere-button{
     background-color: #d20012 !important;
-    margin-top: 5%;
+    margin-top: 1%;
+}
+
+#modal-main-row{
+    margin-bottom: 0 !important;
+}
+
+.input-field input[type=text]:focus + label {
+    color: #000;
+}
+input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-default):focus:not([readonly])+label, input[type=password]:not(.browser-default):focus:not([readonly])+label, input[type=email]:not(.browser-default):focus:not([readonly])+label, input[type=url]:not(.browser-default):focus:not([readonly])+label, input[type=time]:not(.browser-default):focus:not([readonly])+label, input[type=date]:not(.browser-default):focus:not([readonly])+label, input[type=datetime]:not(.browser-default):focus:not([readonly])+label, input[type=datetime-local]:not(.browser-default):focus:not([readonly])+label, input[type=tel]:not(.browser-default):focus:not([readonly])+label, input[type=number]:not(.browser-default):focus:not([readonly])+label, input[type=search]:not(.browser-default):focus:not([readonly])+label, textarea.materialize-textarea:focus:not([readonly])+label{
+    color: #d20012 !important;
+}
+
+.sidenav .collapsible-body li a, .sidenav.fixed .collapsible-body li a{
+    padding-left: 20% !important;
 }
 
 .center-btn{
@@ -389,7 +416,7 @@ input:focus{
     #slide-out a{
         font-size: 3vw !important;
     }
-    
+
     #slide-out a.fab{
         font-size: 7vw !important;
     }
@@ -408,12 +435,51 @@ input:focus{
         display: inline-block;
         transition: background-color 0.6s ease;
     }
-    
+
     li.collection-item{
         font-size: 2.5vw;
     }
-    
+
     .collection .collection-item.avatar .title{
         font-size: 2vw !important;
     }
+
+    #adhesion-txt{
+        font-size: 3vw !important;
+        text-align: justify !important;
+    }
+
+    #title-modal{
+        font-size: 4vw !important;
+        text-align: center !important;
+    }
+
+    .input-field.col label{
+        font-size: 3vw !important;
+        margin-top: -20px !important;
+    }
+
+    .input-field{
+        margin-bottom: 5% !important;
+    }
+
+    #title-modal{
+        margin-bottom: 10% !important;
+    }
+
+    #adhesion-txt{
+        margin-bottom: 8% !important;
+    }
+
+    #adhere-button{
+        font-size: 3vw !important;
+        width: 200px;
+        height: 60px;
+        padding-top: 10px;
+    }
+
+    .sidenav .collapsible-body li a, .sidenav.fixed .collapsible-body li a{
+        padding-left: 10% !important;
+    }
+}
 }
