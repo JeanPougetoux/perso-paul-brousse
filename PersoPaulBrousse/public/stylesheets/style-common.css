@@ -277,7 +277,7 @@ a:hover {
 }
 
 input:focus{
-    border-bottom: 0.5px solid black!important;
+    border-color: #d20012 !important;
     box-shadow: 0 0 0 0 black!important;
 }
 
@@ -296,7 +296,7 @@ input:focus{
 
 #adhere-button{
     background-color: #d20012 !important;
-    margin-top: 1%;
+    margin-top: 2%;
 }
 
 #modal-main-row{
@@ -312,10 +312,6 @@ input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-def
 
 .sidenav .collapsible-body li a, .sidenav.fixed .collapsible-body li a{
     padding-left: 20% !important;
-}
-
-.center-btn{
-    text-align: center;
 }
 
 .collection .collection-item.avatar p{
