@@ -301,7 +301,7 @@ input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-def
 }
 
 .collection .collection-item.avatar .title{
-    font-size: 1.4vw !important;
+    font-size: 1.3vw !important;
     padding-left: 0.5%;
 }
 
