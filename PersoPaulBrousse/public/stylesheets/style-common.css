@@ -295,11 +295,13 @@ input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-def
 }
 
 .collection .collection-item.avatar p{
+    font-size: 1.1vw !important;
     width: 96%;
     padding-left: 0.5%;
 }
 
 .collection .collection-item.avatar .title{
+    font-size: 1.6vw !important;
     padding-left: 0.5%;
 }
 
@@ -479,6 +481,10 @@ input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-def
     }
 
     .collection .collection-item.avatar .title{
+        font-size: 3vw !important;
+    }
+    
+    .collection .collection-item.avatar p {
         font-size: 2vw !important;
     }
 
