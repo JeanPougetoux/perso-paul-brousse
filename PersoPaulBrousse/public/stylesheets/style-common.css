@@ -301,7 +301,7 @@ input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-def
 }
 
 .collection .collection-item.avatar .title{
-    font-size: 1.6vw !important;
+    font-size: 1.4vw !important;
     padding-left: 0.5%;
 }
 
@@ -485,7 +485,7 @@ input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-def
     }
     
     .collection .collection-item.avatar p {
-        font-size: 2vw !important;
+        font-size: 2.7vw !important;
     }
 
     #adhesion-txt{
