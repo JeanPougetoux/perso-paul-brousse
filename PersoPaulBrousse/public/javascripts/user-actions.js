@@ -90,22 +90,26 @@ $(document).ready(function(){
         $("#search-result-list").empty();
 
         var value = $('#namanyay-search-box').val();
-
-        var result = [
-            {
-                text: "oki",
-                url: "lalalal"
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: "/search/" + value,
+            context: this,
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
             },
-            {
-                text: "jean",
-                url: "robert"
+            success: function (result) {
+                if(result.success){
+                    result.success.forEach(element => {
+                        var regex = /(<([^>]+)>)/ig
+                        $("#search-result-list").append(
+                            element.type === "LINK" ?
+                            `<a href="#" class="trigger-pdf collection-item"> <input type="hidden" value="` + element.url + `">` + element.text.replace(regex, '') + `</a>` :
+                            '<a href=' + element.url + ' class="collection-item">' + element.text.replace(regex, '') + '</a>'
+                        );
+                    });
+                }
             }
-        ];
-
-        result.forEach(element => {
-            $("#search-result-list").append(
-                ' <a href=' + element.url + ' class="collection-item">' + element.text + '</a> '
-            );
         });
 
         var modal = M.Modal.getInstance($("#modal-search"));
