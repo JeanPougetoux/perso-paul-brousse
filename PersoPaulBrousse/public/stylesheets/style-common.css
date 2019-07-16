@@ -15,6 +15,10 @@
     margin-top: 20%;
 }
 
+#namanyay-search-btn {
+    cursor: pointer;
+}
+
 hr{
     border-top: 1px solid #d20012;
     margin: 0.1em 0;
@@ -525,5 +529,4 @@ input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-def
     .sidenav .collapsible-body li a, .sidenav.fixed .collapsible-body li a{
         padding-left: 10% !important;
     }
-}
 }

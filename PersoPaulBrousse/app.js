@@ -54,7 +54,7 @@ app.use('/', common);
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
     models.NavigationElement.findAll({
-        ttributes: ['id', 'title', 'order'],
+        attributes: ['id', 'title', 'order'],
         order: [
             ['order', 'ASC'],
             [models.NavigationSubElement, 'order', 'ASC']

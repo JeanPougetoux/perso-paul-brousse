@@ -1,6 +1,79 @@
 var express = require('express');
 var models = require('../models');
+var sequelize = require('sequelize');
 var router = express.Router();
+var Op = sequelize.Op;
+
+router.get('/search/:text', function(req, res, next) {
+    models.PageContent.findAll({
+        attributes: ['content'],
+        where: { content: { [Op.like]: '%' + req.params.text + '%' }},
+        include: [{
+            model: models.NavigationSubElement,
+            attributes: ['title'],
+            required: true,
+            include: [{
+                model: models.NavigationElement,
+                attributes: ['title'],
+                required: true
+            }]
+        }]
+    }).then(function(contents){
+        var processedResults = [];
+        contents.forEach(content => {
+            if(content.NavigationSubElement.title === content.NavigationSubElement.NavigationElement.title) {
+                processedResults.push({text: content.content, url: "/" + content.NavigationSubElement.title, type: "CONTENT"});
+            }
+            else {
+                processedResults.push({text: content.content, url: "/" + content.NavigationSubElement.NavigationElement.title + "/" + content.NavigationSubElement.title, type: "CONTENT"});
+            }
+        });
+        models.PageListElement.findAll({
+            attributes: ['id', 'title', 'description', 'content', 'type'],
+            where: { 
+                [Op.or]: [ 
+                    { description: { [Op.like]: '%' + req.params.text + '%' } }, 
+                    { content: { [Op.like]: '%' + req.params.text + '%' } }, 
+                    { title: { [Op.like]: '%' + req.params.text + '%' } } 
+                ] 
+            },
+            include: [{
+                model: models.NavigationSubElement,
+                attributes: ['title'],
+                required: true,
+                include: [{
+                    model: models.NavigationElement,
+                    attributes: ['title'],
+                    required: true
+                }]
+            }]
+        }).then(function(list){
+            list.forEach(element => {
+                var text = "";
+                if(element.title.includes(req.params.text)) {
+                    text = element.title;
+                }
+                else if(element.description.includes(req.params.text)) {
+                    text = element.description;
+                }
+                else if(element.content.includes(req.params.text)) {
+                    text = element.content;
+                }
+                processedResults.push(
+                    {
+                        text: text, 
+                        url: element.type === "LINK" ? element.content : "/" + element.NavigationSubElement.NavigationElement.title + "/" + element.NavigationSubElement.title + "/" + element.id, 
+                        type: element.type
+                    });
+            });
+            return res.status(200).json({'success': processedResults});
+        }).catch(function(error){
+            console.log(error);
+        });
+    }).catch(function(error){
+        console.log(error);
+    });
+});
 
 router.post('/adhere', function(req, res, next){
     if(req.body.firstname == "" || req.body.lastname == "" || req.body.service == "" || req.body.email == "" || req.body.phone == ""){
@@ -227,7 +300,7 @@ router.get('/:page/:subpage', function(req, res, next){
 
 router.get('/:page', function(req, res, next){
     models.NavigationElement.findAll({
-        ttributes: ['id', 'title', 'order'],
+        attributes: ['id', 'title', 'order'],
         order: [
             ['order', 'ASC'],
             [models.NavigationSubElement, 'order', 'ASC']

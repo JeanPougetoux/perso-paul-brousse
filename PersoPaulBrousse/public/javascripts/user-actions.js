@@ -83,5 +83,32 @@ $(document).ready(function(){
         var pdf = $(this).find("input").val();
         $("#pdf").attr('src', "/images/" + pdf);
         $("#dialog").dialog();
-    }); 
+    });
+
+    $('#namanyay-search-btn').click(function(e) {
+        e.preventDefault();
+        $("#search-result-list").empty();
+
+        var value = $('#namanyay-search-box').val();
+
+        var result = [
+            {
+                text: "oki",
+                url: "lalalal"
+            },
+            {
+                text: "jean",
+                url: "robert"
+            }
+        ];
+
+        result.forEach(element => {
+            $("#search-result-list").append(
+                ' <a href=' + element.url + ' class="collection-item">' + element.text + '</a> '
+            );
+        });
+
+        var modal = M.Modal.getInstance($("#modal-search"));
+        modal.open();
+    });
 });
