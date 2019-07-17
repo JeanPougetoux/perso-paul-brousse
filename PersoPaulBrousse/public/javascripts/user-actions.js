@@ -79,9 +79,52 @@ $(document).ready(function(){
         });
     });
 
-    $('.trigger-pdf').click(function(){
-        var pdf = $(this).find("input").val();
+    $('.trigger-pdf').on('click', function(){
+        trigger($(this));
+    });
+
+    function trigger(source) {
+        var modal = M.Modal.getInstance($("#modal-search"));
+        modal.close();
+        var pdf = source.find("input").val();
         $("#pdf").attr('src', "/images/" + pdf);
         $("#dialog").dialog();
-    }); 
+    }
+
+    $('#namanyay-search-btn').click(function(e) {
+        e.preventDefault();
+        $("#search-result-list").empty();
+
+        var value = $('#namanyay-search-box').val();
+        $.ajax({
+            type: 'GET',
+            dataType: 'json',
+            url: "/search/" + value,
+            context: this,
+            error: function (jqXHR, textStatus, errorThrown) {
+                swal("Erreur", jqXHR.responseJSON.error, "error");
+            },
+            success: function (result) {
+                if(result.success){
+                    result.success.forEach(element => {
+                        var regex = /(<([^>]+)>)/ig
+                        if(element.type === "LINK") {
+                            var toAppend = document.createElement('a');
+                            toAppend.innerHTML = '<input type="hidden" value="' + element.url + '"></input>' + element.text.replace(regex, '');
+                            toAppend.className = "collection-item";
+                            toAppend.addEventListener('click', () => trigger($(toAppend)));
+                            $("#search-result-list").append(toAppend);
+                        }
+                        else {
+                            var toAppend = '<a href=' + element.url + ' class="collection-item">' + element.text.replace(regex, '') + '</a>';
+                            $("#search-result-list").append(toAppend);
+                        }
+                    });
+                }
+            }
+        });
+
+        var modal = M.Modal.getInstance($("#modal-search"));
+        modal.open();
+    });
 });
