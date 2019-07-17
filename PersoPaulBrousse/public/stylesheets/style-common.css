@@ -329,6 +329,10 @@ input:not([type]):focus:not([readonly])+label, input[type=text]:not(.browser-def
     z-index: 3 !important;
 }
 
+a.collection-item{
+    color: #d20012 !important;
+}
+
 /* MEDIA QUERIES */
 
 @media only screen and (min-width: 992px){
