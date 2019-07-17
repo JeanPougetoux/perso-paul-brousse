@@ -107,16 +107,17 @@ $(document).ready(function(){
             success: function (result) {
                 if(result.success){
                     result.success.forEach(element => {
+			console.log(element);
                         var regex = /(<([^>]+)>)/ig
                         if(element.type === "LINK") {
                             var toAppend = document.createElement('a');
-                            toAppend.innerHTML = '<input type="hidden" value="' + element.url + '"></input>' + element.text.replace(regex, '');
+                            toAppend.innerHTML = '<input type="hidden" value="' + element.url + '"></input>' + element.text.replace(regex, '').substring(0, 150) + "...";
                             toAppend.className = "collection-item";
                             toAppend.addEventListener('click', () => trigger($(toAppend)));
                             $("#search-result-list").append(toAppend);
                         }
                         else {
-                            var toAppend = '<a href=' + element.url + ' class="collection-item">' + element.text.replace(regex, '') + '</a>';
+                            var toAppend = '<a href=' + element.url.split(' ').join("%20") + ' class="collection-item">' + element.text.replace(regex, '').substring(0, 150) + "..." + '</a>';
                             $("#search-result-list").append(toAppend);
                         }
                     });

@@ -19,7 +19,7 @@ router.get('/search/:text', function(req, res, next) {
             }]
         }]
     }).then(function(contents){
-        var processedResults = [];
+	var processedResults = [];
         contents.forEach(content => {
             if(content.NavigationSubElement.title === content.NavigationSubElement.NavigationElement.title) {
                 processedResults.push({text: content.content, url: "/" + content.NavigationSubElement.title, type: "CONTENT"});
@@ -47,16 +47,16 @@ router.get('/search/:text', function(req, res, next) {
                     required: true
                 }]
             }]
-        }).then(function(list){
-            list.forEach(element => {
+        }).then(function(list){	
+	list.forEach(element => {
                 var text = "";
-                if(element.title.includes(req.params.text)) {
+                if(element.title.toUpperCase().includes(req.params.text.toUpperCase())) {
                     text = element.title;
                 }
-                else if(element.description.includes(req.params.text)) {
+                else if(element.description.toUpperCase().includes(req.params.text.toUpperCase())) {
                     text = element.description;
                 }
-                else if(element.content.includes(req.params.text)) {
+                else if(element.content.toUpperCase().includes(req.params.text.toUpperCase())) {
                     text = element.content;
                 }
                 processedResults.push(
