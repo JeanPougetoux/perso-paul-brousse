@@ -4,7 +4,12 @@
 }
 
 .ui-dialog .ui-dialog-titlebar .ui-dialog-titlebar-close {
-    background: #d20012;
+    background-image: url("/public/images/arrow.png");
+    background-size: cover;
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default, .ui-button, html .ui-button.ui-state-disabled:hover, html .ui-button.ui-state-disabled:active {
+    border: 1px solid #e9e9e9 !important;
 }
 
 .sidenav li>a>i, .sidenav li>a>[class^="mdi-"], .sidenav li>a li>a>[class*="mdi-"], .sidenav li>a>i.material-icons{
