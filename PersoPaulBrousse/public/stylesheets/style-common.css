@@ -338,6 +338,10 @@ a.collection-item{
     color: #d20012 !important;
 }
 
+.sidenav li > a {
+    height: unset !important;
+}
+
 /* MEDIA QUERIES */
 
 @media only screen and (min-width: 992px){
